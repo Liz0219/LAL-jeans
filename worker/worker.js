@@ -1,6 +1,5 @@
 export default {
   async fetch(request, env, ctx) {
-    // CORS headers
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -19,38 +18,30 @@ export default {
     try {
       const body = await request.json();
 
-      // Extraer mensaje - compatible con múltiples formatos de Kommo
-      const mensaje = body.message || body.data?.message || body.text || '';
+      // Extraer mensaje y return_url del request
+      const mensaje = body.data?.message || body.message || body.text || '';
+      const returnUrl = body.return_url || '';
 
+      // Si hay return_url = viene del Salesbot widget_request
+      // Responder rápido y procesar async
+      if (returnUrl) {
+        ctx.waitUntil(procesarConDify(mensaje, returnUrl, env));
+        return new Response(JSON.stringify({ status: 'received' }), {
+          status: 200, headers: corsHeaders
+        });
+      }
+
+      // Sin return_url = llamada directa, responder sincrónicamente
       if (!mensaje) {
         return new Response(JSON.stringify({ response: 'No se recibió mensaje' }), {
           status: 200, headers: corsHeaders
         });
       }
 
-      // Llamar a Dify API (sincrónico - espera la respuesta)
-      const difyResponse = await fetch('https://api.dify.ai/v1/chat-messages', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + env.DIFY_API_KEY,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          inputs: {},
-          query: mensaje,
-          response_mode: 'blocking',
-          conversation_id: body.conversation_id || '',
-          user: 'kommo-user-' + (body.contact_id || Date.now())
-        })
-      });
+      const respuestaIA = await llamarDify(mensaje, env);
 
-      const difyData = await difyResponse.json();
-      const respuestaIA = difyData.answer || 'Lo siento, no pude procesar tu mensaje.';
-
-      // Devolver respuesta directa para Salesbot webhook
       return new Response(JSON.stringify({
-        response: respuestaIA,
-        conversation_id: difyData.conversation_id || ''
+        response: respuestaIA
       }), {
         status: 200, headers: corsHeaders
       });
@@ -64,3 +55,71 @@ export default {
     }
   }
 };
+
+async function llamarDify(mensaje, env) {
+  try {
+    const difyResponse = await fetch('https://api.dify.ai/v1/chat-messages', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + env.DIFY_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        inputs: {},
+        query: mensaje,
+        response_mode: 'blocking',
+        conversation_id: '',
+        user: 'kommo-user-' + Date.now()
+      })
+    });
+
+    const difyData = await difyResponse.json();
+    return difyData.answer || 'Lo siento, no pude procesar tu mensaje.';
+  } catch (error) {
+    return 'Dame un momento que te conecto con alguien del equipo';
+  }
+}
+
+async function procesarConDify(mensaje, returnUrl, env) {
+  try {
+    const respuestaIA = await llamarDify(mensaje, env);
+
+    // Enviar respuesta de vuelta al Salesbot via return_url
+    await fetch(returnUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: { status: 'success' },
+        execute_handlers: [
+          {
+            handler: 'show',
+            params: {
+              type: 'text',
+              value: respuestaIA
+            }
+          }
+        ]
+      })
+    });
+  } catch (error) {
+    // Si hay error, enviar mensaje de respaldo
+    if (returnUrl) {
+      await fetch(returnUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: { status: 'error' },
+          execute_handlers: [
+            {
+              handler: 'show',
+              params: {
+                type: 'text',
+                value: 'Dame un momento que te conecto con alguien del equipo'
+              }
+            }
+          ]
+        })
+      });
+    }
+  }
+}
