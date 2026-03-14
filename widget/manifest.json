@@ -3,8 +3,8 @@
     "name": "widget.name",
     "description": "widget.description",
     "short_description": "widget.short_description",
-    "code": "lalidifybotv2",
-    "secret_key": "96E3wzWDITBcvYZ47kcwSWjs2wtB28GyVDD4YX50kiDOY5KNdlh1Ns1je3Hiwb2l",
+    "code": "hzqvmf0gfvozytwoyuuu5huaasgvg1idubnvaxff",
+    "secret_key": "sg26tvRZOCgFCxQeoON95DVSaJm5qvV3zYlJaWStSpnc6PueRGND7aHiTBAM8HUM",
     "version": "1.0.1",
     "init_once": false,
     "locale": [
