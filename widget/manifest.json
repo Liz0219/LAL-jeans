@@ -3,8 +3,8 @@
     "name": "widget.name",
     "description": "widget.description",
     "short_description": "widget.short_description",
-    "code": "hzqvmf0gfvozytwoyuuu5huaasgvg1idubnvaxff",
-    "secret_key": "8zJbUG9gStTqMeWBteAIDw99r3XZjB8hc6Hr3wKx99vtVdrlOWLHTh8cCKOcjuJG",
+    "code": "lali_dify_bot_widget",
+    "secret_key": "MyzJivlelRqVxd49s0BxbEMzhz0kNPw2JfWXWw2Qd1aaIfjL2gOjTeYeTCDQ4u9C",
     "version": "1.0.1",
     "init_once": false,
     "locale": [
