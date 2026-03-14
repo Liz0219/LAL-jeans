@@ -6,7 +6,9 @@
     "code": "hzqvmf0gfvozytwoyuuu5huaasgvg1idubnvaxff",
     "secret": "HzY0rW0GljGFeN8gq1XvOKGGIz5uJ1ekWfYxkL3PCEC9RWDrvxKSxWipBMZcEb1c",
     "version": "1.0.0",
+    "interface_version": 2,
     "init_once": false,
+    "installation": true,
     "locale": [
       "en",
       "es"
