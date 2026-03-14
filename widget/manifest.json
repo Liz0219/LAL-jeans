@@ -3,8 +3,8 @@
     "name": "widget.name",
     "description": "widget.description",
     "short_description": "widget.short_description",
-    "code": "test_diagnostico_abc123",
-    "secret_key": "uEiATVV51f6L9jKwj9059o4UL0MFvAOgpszH6FgOOgUfIgwqx4KI5qWS70PbmVvl",
+    "code": "lali_dify_bot",
+    "secret_key": "gukBwiT6an4nb1zg945UGbRwBuXkomy9hLgizVeH0bwNuTSGt1RhZr33Pi26S49t",
     "version": "1.0.1",
     "init_once": false,
     "locale": [
