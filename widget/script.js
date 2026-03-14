@@ -20,6 +20,10 @@ define(['jquery'], function ($) {
         return true;
       },
 
+      dpSettings: function () {
+        return true;
+      },
+
       onSave: function () {
         return true;
       },

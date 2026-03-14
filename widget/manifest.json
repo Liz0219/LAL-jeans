@@ -5,7 +5,7 @@
     "short_description": "widget.short_description",
     "code": "lalidifybotv2",
     "secret_key": "96E3wzWDITBcvYZ47kcwSWjs2wtB28GyVDD4YX50kiDOY5KNdlh1Ns1je3Hiwb2l",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "init_once": false,
     "locale": [
       "en",
@@ -13,8 +13,20 @@
     ]
   },
   "locations": [
+    "settings",
+    "digital_pipeline",
     "salesbot_designer"
   ],
+  "dp": {
+    "settings": {
+      "text": {
+        "name": "widget.handler_message_field",
+        "type": "text",
+        "default_value": "{{message_text}}",
+        "manual": false
+      }
+    }
+  },
   "salesbot_designer": {
     "logo": "images/logo_dp.png",
     "send_message": {
