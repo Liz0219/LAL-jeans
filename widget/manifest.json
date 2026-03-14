@@ -3,12 +3,10 @@
     "name": "widget.name",
     "description": "widget.description",
     "short_description": "widget.short_description",
-    "code": "hzqvmf0gfvozytwoyuuu5huaasgvg1idubnvaxff",
-    "secret": "sg26tvRZOCgFCxQeoON95DVSaJm5qvV3zYlJaWStSpnc6PueRGND7aHiTBAM8HUM",
+    "code": "lalidifybotv2",
+    "secret": "96E3wzWDITBcvYZ47kcwSWjs2wtB28GyVDD4YX50kiDOY5KNdlh1Ns1je3Hiwb2l",
     "version": "1.0.0",
-    "interface_version": 2,
     "init_once": false,
-    "installation": true,
     "locale": [
       "en",
       "es"
@@ -19,7 +17,7 @@
   ],
   "salesbot_designer": {
     "logo": "images/logo_dp.png",
-    "handler_code": {
+    "send_message": {
       "name": "widget.handler_name",
       "settings": {
         "text": {
