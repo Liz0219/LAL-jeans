@@ -4,7 +4,7 @@
     "description": "widget.description",
     "short_description": "widget.short_description",
     "code": "lalidifybotv2",
-    "secret": "96E3wzWDITBcvYZ47kcwSWjs2wtB28GyVDD4YX50kiDOY5KNdlh1Ns1je3Hiwb2l",
+    "secret_key": "96E3wzWDITBcvYZ47kcwSWjs2wtB28GyVDD4YX50kiDOY5KNdlh1Ns1je3Hiwb2l",
     "version": "1.0.0",
     "init_once": false,
     "locale": [
