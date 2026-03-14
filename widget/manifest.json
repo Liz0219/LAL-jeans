@@ -1,0 +1,29 @@
+{
+  "widget": {
+    "name": "widget.name",
+    "description": "widget.description",
+    "short_description": "widget.short_description",
+    "code": "lali_dify_bot",
+    "secret": "REPLACE_WITH_YOUR_SECRET_KEY",
+    "version": "1.0.0",
+    "init_once": false,
+    "locale": ["en", "es"]
+  },
+  "locations": [
+    "salesbot_designer"
+  ],
+  "salesbot_designer": {
+    "logo": "/images/logo_dp.png",
+    "handler_code": {
+      "name": "widget.handler_name",
+      "settings": {
+        "text": {
+          "name": "widget.handler_message_field",
+          "type": "text",
+          "default_value": "{{message_text}}",
+          "manual": false
+        }
+      }
+    }
+  }
+}

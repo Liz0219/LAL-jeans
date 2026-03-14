@@ -1,0 +1,9 @@
+{
+  "widget": {
+    "name": "LALi Dify Bot",
+    "short_description": "Chatbot de IA con Dify a través de Cloudflare Worker",
+    "description": "Conecta el Salesbot de Kommo con un chatbot de IA Dify a través de un Cloudflare Worker. Envía mensajes del cliente y devuelve respuestas generadas por IA.",
+    "handler_name": "Enviar a LALi Bot",
+    "handler_message_field": "Mensaje del cliente"
+  }
+}
