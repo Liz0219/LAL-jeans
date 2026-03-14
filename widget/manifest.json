@@ -3,7 +3,7 @@
     "name": "widget.name",
     "description": "widget.description",
     "short_description": "widget.short_description",
-    "code": "rdxcpkx6hfbb93bjthmkbouxrw5l4xs6g1bwoczr",
+    "code": "test_diagnostico_abc123",
     "secret_key": "uEiATVV51f6L9jKwj9059o4UL0MFvAOgpszH6FgOOgUfIgwqx4KI5qWS70PbmVvl",
     "version": "1.0.1",
     "init_once": false,
