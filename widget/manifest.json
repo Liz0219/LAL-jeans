@@ -7,13 +7,16 @@
     "secret": "HzY0rW0GljGFeN8gq1XvOKGGIz5uJ1ekWfYxkL3PCEC9RWDrvxKSxWipBMZcEb1c",
     "version": "1.0.0",
     "init_once": false,
-    "locale": ["en", "es"]
+    "locale": [
+      "en",
+      "es"
+    ]
   },
   "locations": [
     "salesbot_designer"
   ],
   "salesbot_designer": {
-    "logo": "/images/logo_dp.png",
+    "logo": "images/logo_dp.png",
     "handler_code": {
       "name": "widget.handler_name",
       "settings": {
