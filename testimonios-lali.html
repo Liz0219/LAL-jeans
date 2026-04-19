@@ -104,12 +104,18 @@
 
 <script>
 (function(){
-  // Avatares IG
-  document.querySelectorAll('.lali-tw__avatar[data-ig]').forEach(function(el){
+  // Avatares: usa data-img si está, si no pide a unavatar IG con fallback=false
+  document.querySelectorAll('.lali-tw__avatar').forEach(function(el){
+    var direct=el.getAttribute('data-img');
     var user=el.getAttribute('data-ig');
-    var url='https://unavatar.io/instagram/'+user;
+    var url=direct || (user?'https://unavatar.io/instagram/'+user+'?fallback=false':null);
+    if(!url) return;
     var img=new Image();
-    img.onload=function(){el.style.backgroundImage="url('"+url+"')";el.textContent='';};
+    img.onload=function(){
+      if(img.naturalWidth<40) return;
+      el.style.backgroundImage="url('"+url+"')";
+      el.textContent='';
+    };
     img.src=url;
   });
 
