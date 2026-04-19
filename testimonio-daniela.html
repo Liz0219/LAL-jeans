@@ -1,4 +1,4 @@
-<!-- LALÍ · Tarjeta testimonio Daniela Arango -->
+<!-- LALÍ · Tarjeta testimonio Daniela Arango (compacta) -->
 <div class="lali-tw">
   <div class="lali-tw__head">
     <div class="lali-tw__avatar" id="laliTwAvatar">DA</div>
@@ -13,24 +13,28 @@
       <div class="lali-tw__handle">@danielaarangoa</div>
     </div>
   </div>
-  <div class="lali-tw__title">Mientras otros hablan, yo me peino</div>
-  <p class="lali-tw__quote">“Esto es rápido, fácil y efectivo. No tienes que saber peinarte perfecto, ella hace el trabajo por ti.”</p>
+  <p class="lali-tw__quote">“Niñas felicitaciones 💜 qué orgullo que Colombia tenga marcas tan TOP. Esperaba mucho, y me dieron más ✨”</p>
   <div class="lali-tw__stars" aria-label="5 estrellas">★★★★★</div>
 </div>
 <style>
-.lali-tw{background:#F4EBDA;border-radius:14px;padding:22px 26px;font-family:'Inter',system-ui,sans-serif;color:#641DFF;max-width:720px;box-sizing:border-box}
-.lali-tw__head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.lali-tw__avatar{width:52px;height:52px;border-radius:50%;background:#A38BE8;color:#F4EBDA;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;letter-spacing:.5px;flex-shrink:0;background-size:cover;background-position:center}
+.lali-tw{background:#F4EBDA;border-radius:12px;padding:14px 16px;font-family:'Inter',system-ui,sans-serif;color:#641DFF;max-width:460px;box-sizing:border-box}
+.lali-tw__head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.lali-tw__avatar{width:38px;height:38px;border-radius:50%;background:#A38BE8;color:#F4EBDA;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;letter-spacing:.5px;flex-shrink:0;background-size:cover;background-position:center;background-image:url('https://unavatar.io/instagram/danielaarangoa')}
 .lali-tw__id{line-height:1.25}
-.lali-tw__name{display:flex;align-items:center;gap:6px;font-weight:800;font-size:18px;color:#641DFF}
-.lali-tw__check{width:18px;height:18px;flex-shrink:0}
-.lali-tw__handle{color:#A38BE8;font-size:14px;margin-top:2px}
-.lali-tw__title{font-weight:800;font-size:18px;margin:0 0 10px;color:#641DFF}
-.lali-tw__quote{margin:0 0 14px;font-size:15px;line-height:1.5;color:#641DFF}
-.lali-tw__stars{color:#641DFF;font-size:20px;letter-spacing:2px}
+.lali-tw__name{display:flex;align-items:center;gap:5px;font-weight:800;font-size:14px;color:#641DFF}
+.lali-tw__check{width:14px;height:14px;flex-shrink:0}
+.lali-tw__handle{color:#A38BE8;font-size:12px;margin-top:1px}
+.lali-tw__quote{margin:0 0 8px;font-size:13px;line-height:1.45;color:#641DFF;font-weight:500}
+.lali-tw__stars{color:#641DFF;font-size:15px;letter-spacing:2px}
 </style>
 <script>
-// Para usar foto real de Daniela: descomenta y pon la URL
-// document.getElementById('laliTwAvatar').style.backgroundImage = "url('https://TU-URL-AQUI.jpg')";
-// document.getElementById('laliTwAvatar').textContent = '';
+// Foto automática desde IG vía unavatar.io. Si prefieres foto estática, reemplaza el background-image del avatar.
+// Si unavatar falla, se muestran las iniciales DA en fondo lila.
+(function(){
+  var el=document.getElementById('laliTwAvatar');
+  var img=new Image();
+  img.onload=function(){el.textContent='';};
+  img.onerror=function(){el.style.backgroundImage='none';};
+  img.src='https://unavatar.io/instagram/danielaarangoa';
+})();
 </script>
