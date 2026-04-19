@@ -1,0 +1,36 @@
+<!-- LALÍ · Barra social live -->
+<div class="lali-live" id="laliLive">
+  <span class="lali-live__dot"></span>
+  <span class="lali-live__msg"><b><span id="laliLiveCount">23</span> mujeres</b> compraron el Bombay en las últimas 48h 🔥</span>
+  <button class="lali-live__x" onclick="document.getElementById('laliLive').style.display='none'" aria-label="Cerrar">×</button>
+</div>
+<style>
+.lali-live{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#E1E580;border-radius:10px;font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#1F1F23;margin:10px 0}
+.lali-live__dot{width:8px;height:8px;border-radius:50%;background:#2A9D58;flex-shrink:0;animation:laliPulse 2s infinite}
+@keyframes laliPulse{0%,100%{opacity:1}50%{opacity:.4}}
+.lali-live__msg{flex:1;line-height:1.35}
+.lali-live__msg b{font-weight:800}
+.lali-live__x{background:none;border:none;font-size:20px;cursor:pointer;color:#4A4A52;padding:0 4px;line-height:1}
+</style>
+<script>
+(function(){
+  var MIN = 18, MAX = 38, SLOT_MS = 15 * 60 * 1000;
+  function countForSlot(slot){
+    var x = Math.sin(slot * 9301 + 49297) * 233280;
+    var r = x - Math.floor(x);
+    return MIN + Math.floor(r * (MAX - MIN + 1));
+  }
+  function render(){
+    var el = document.getElementById('laliLiveCount');
+    if(!el) return;
+    var slot = Math.floor(Date.now() / SLOT_MS);
+    el.textContent = countForSlot(slot);
+  }
+  render();
+  var msToNextSlot = SLOT_MS - (Date.now() % SLOT_MS);
+  setTimeout(function(){
+    render();
+    setInterval(render, SLOT_MS);
+  }, msToNextSlot);
+})();
+</script>
