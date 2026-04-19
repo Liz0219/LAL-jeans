@@ -22,20 +22,21 @@
   </div>
 </div>
 <style>
-.lali-cm{display:flex;gap:10px;background:#F4EBDA;border-radius:12px;padding:12px 14px;font-family:'Inter',system-ui,sans-serif;max-width:460px;box-sizing:border-box;align-items:flex-start}
-.lali-cm__avatar{width:34px;height:34px;border-radius:50%;background:#A38BE8;color:#F4EBDA;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;background-size:cover;background-position:center;background-image:url('https://unavatar.io/instagram/danielaarangoa')}
+.lali-cm{display:flex;gap:clamp(8px,1vw,12px);background:#F4EBDA;border-radius:clamp(10px,1.2vw,14px);padding:clamp(10px,1.4vw,14px) clamp(12px,1.6vw,16px);font-family:'Inter',system-ui,sans-serif;width:100%;max-width:clamp(320px,46vw,480px);box-sizing:border-box;align-items:flex-start}
+.lali-cm__avatar{width:clamp(28px,2.8vw,36px);height:clamp(28px,2.8vw,36px);border-radius:50%;background:#A38BE8;color:#F4EBDA;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(10px,1vw,13px);flex-shrink:0;background-size:cover;background-position:center;background-image:url('https://unavatar.io/instagram/danielaarangoa')}
 .lali-cm__body{flex:1;min-width:0;line-height:1.35}
-.lali-cm__head{display:flex;align-items:center;gap:4px;font-size:13px;flex-wrap:wrap}
+.lali-cm__head{display:flex;align-items:center;gap:4px;font-size:clamp(12px,1.05vw,14px);flex-wrap:wrap}
 .lali-cm__name{font-weight:700;color:#641DFF}
-.lali-cm__check{width:13px;height:13px;flex-shrink:0}
+.lali-cm__check{width:clamp(11px,1.1vw,14px);height:clamp(11px,1.1vw,14px);flex-shrink:0}
 .lali-cm__dot{color:#A38BE8;margin:0 2px}
 .lali-cm__tag{color:#A38BE8;font-weight:600}
-.lali-cm__text{margin:4px 0 8px;font-size:13px;color:#641DFF}
-.lali-cm__meta{display:flex;align-items:center;gap:14px;font-size:12px;color:#A38BE8}
+.lali-cm__text{margin:4px 0 8px;font-size:clamp(12px,1.05vw,14px);color:#641DFF}
+.lali-cm__meta{display:flex;align-items:center;gap:clamp(10px,1.2vw,14px);font-size:clamp(11px,.95vw,12px);color:#A38BE8}
 .lali-cm__time{font-weight:500}
 .lali-cm__reply{font-weight:600;cursor:pointer}
 .lali-cm__spacer{flex:1}
-.lali-cm__ic{width:16px;height:16px;cursor:pointer}
+.lali-cm__ic{width:clamp(14px,1.3vw,17px);height:clamp(14px,1.3vw,17px);cursor:pointer}
+@media(max-width:480px){.lali-cm{max-width:100%}}
 </style>
 <script>
 (function(){
