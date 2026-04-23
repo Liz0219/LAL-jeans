@@ -163,10 +163,31 @@
 <script>
 (function () {
   "use strict";
-  const root  = document.currentScript.previousElementSibling;
-  const track = root.querySelector(".lal-complementa__track");
-  const prev  = root.querySelector(".lal-complementa__nav--prev");
-  const next  = root.querySelector(".lal-complementa__nav--next");
+
+  function initLal() {
+    try {
+      /* Soporta múltiples instancias y no depende de document.currentScript */
+      const roots = document.querySelectorAll(".lal-complementa:not([data-lal-init])");
+      if (!roots.length) return;
+
+      roots.forEach((root) => {
+        try {
+          root.setAttribute("data-lal-init", "true");
+          mount(root);
+        } catch (e) {
+          console.warn("[LAL] init instance failed", e);
+        }
+      });
+    } catch (e) {
+      console.warn("[LAL] init failed", e);
+    }
+  }
+
+  function mount(root) {
+    const track = root.querySelector(".lal-complementa__track");
+    const prev  = root.querySelector(".lal-complementa__nav--prev");
+    const next  = root.querySelector(".lal-complementa__nav--next");
+    if (!track || !prev || !next) return;
 
   const money = (cents) => new Intl.NumberFormat("es-CO", {
     style: "currency", currency: "COP", maximumFractionDigits: 0
@@ -347,11 +368,23 @@
     }
   });
 
-  /* 5) Bootstrap */
-  (async function init() {
-    const id = await getCurrentProductId();
-    const related = await loadRelated(id);
-    render(related);
-  })();
+    /* 5) Bootstrap por instancia */
+    (async function boot() {
+      try {
+        const id = await getCurrentProductId();
+        const related = await loadRelated(id);
+        render(related);
+      } catch (e) {
+        console.warn("[LAL] boot failed", e);
+        render([]);
+      }
+    })();
+  } // end mount()
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLal);
+  } else {
+    initLal();
+  }
 })();
 </script>
