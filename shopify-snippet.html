@@ -1,0 +1,283 @@
+<!--
+  LAL Jeans — "Complementa tu look"
+  =====================================================================
+  QUÉ HACE: muestra productos relacionados al que se está viendo,
+  excluyendo automáticamente ese mismo producto. Usa el endpoint
+  NATIVO de Shopify /recommendations/products.json (gratis, sin apps).
+
+  DÓNDE PEGAR:
+  - Instant.so: Custom HTML block dentro de la página de producto.
+  - Shopify theme: dentro de sections/main-product.liquid o como snippet.
+
+  Todo (estilos + HTML + lógica) está en este único archivo. Solo copia
+  y pega. Funciona tal cual.
+  =====================================================================
+-->
+
+<style>
+  .lal-complementa {
+    --lal-bg: #f4f3d5;
+    --lal-surface: #ffffff;
+    --lal-ink: #0a0a0a;
+    --lal-muted: #6b6b6b;
+    --lal-accent: #d7e34a;
+    --lal-accent-hover: #c7d43a;
+    --lal-nav-ink: #3b3ba0;
+    background: var(--lal-bg);
+    padding: 40px 0 48px;
+    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    color: #1f1f1f;
+  }
+  .lal-complementa * { box-sizing: border-box; }
+  .lal-complementa__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+  .lal-complementa__title {
+    margin: 0 0 24px;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: var(--lal-ink);
+  }
+  .lal-complementa__carousel { position: relative; }
+  .lal-complementa__track {
+    list-style: none;
+    margin: 0;
+    padding: 4px 4px 12px;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .lal-complementa__track::-webkit-scrollbar { display: none; }
+  .lal-card {
+    flex: 0 0 calc(100% - 40px);
+    scroll-snap-align: start;
+    background: var(--lal-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 45% 1fr;
+    min-height: 230px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  @media (min-width: 700px) { .lal-card { flex: 0 0 calc((100% - 20px) / 2); } }
+  @media (min-width: 1024px) { .lal-card { flex: 0 0 calc((100% - 60px) / 4); } }
+
+  .lal-card__media { position: relative; background: #eee; overflow: hidden; }
+  .lal-card__img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .4s ease;
+  }
+  .lal-card:hover .lal-card__img { transform: scale(1.03); }
+  .lal-card__fav {
+    position: absolute; top: 10px; left: 10px;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,0.85);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .lal-card__fav svg { width: 18px; height: 18px; color: #111; }
+  .lal-card__fav[aria-pressed="true"] svg { color: #e0245e; fill: #e0245e; }
+  .lal-card__body {
+    padding: 18px 18px 16px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    gap: 12px;
+  }
+  .lal-card__name {
+    margin: 0; font-size: 15px; font-weight: 500; color: #2b2b2b;
+    line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lal-card__price { margin: 4px 0 0; font-size: 17px; font-weight: 800; color: var(--lal-ink); }
+  .lal-card__cta {
+    border: none; background: var(--lal-accent); color: var(--lal-ink);
+    font-weight: 700; font-size: 13px; letter-spacing: .04em;
+    padding: 12px 14px; border-radius: 14px; cursor: pointer;
+    display: inline-flex; gap: 6px; align-items: center; justify-content: center;
+  }
+  .lal-card__cta:hover { background: var(--lal-accent-hover); }
+  .lal-card__cta[aria-pressed="true"] { background: var(--lal-ink); color: var(--lal-accent); }
+
+  .lal-complementa__nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid #d9d6a8; background: var(--lal-bg);
+    color: var(--lal-nav-ink);
+    display: grid; place-items: center; cursor: pointer; z-index: 2;
+    transition: transform .15s ease, background .15s ease, opacity .2s ease;
+  }
+  .lal-complementa__nav svg { width: 22px; height: 22px; }
+  .lal-complementa__nav:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+  .lal-complementa__nav:disabled { opacity: .35; cursor: not-allowed; }
+  .lal-complementa__nav--prev { left: -8px; }
+  .lal-complementa__nav--next { right: -8px; }
+  @media (min-width: 1024px) {
+    .lal-complementa__nav--prev { left: -22px; }
+    .lal-complementa__nav--next { right: -22px; }
+  }
+  .lal-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--lal-muted); font-size: 14px; }
+</style>
+
+<section class="lal-complementa" aria-labelledby="lal-complementa-title">
+  <div class="lal-complementa__inner">
+    <h2 id="lal-complementa-title" class="lal-complementa__title">Complementa tu look</h2>
+    <div class="lal-complementa__carousel">
+      <button class="lal-complementa__nav lal-complementa__nav--prev" type="button" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <ul class="lal-complementa__track" role="list"></ul>
+      <button class="lal-complementa__nav lal-complementa__nav--next" type="button" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  const root  = document.currentScript.previousElementSibling;
+  const track = root.querySelector(".lal-complementa__track");
+  const prev  = root.querySelector(".lal-complementa__nav--prev");
+  const next  = root.querySelector(".lal-complementa__nav--next");
+
+  const money = (cents) => new Intl.NumberFormat("es-CO", {
+    style: "currency", currency: "COP", maximumFractionDigits: 0
+  }).format(Number(cents) / 100);
+
+  /* 1) Detecta el producto actual usando lo que Shopify ya expone */
+  async function getCurrentProductId() {
+    if (window.ShopifyAnalytics && window.ShopifyAnalytics.meta && window.ShopifyAnalytics.meta.product) {
+      return window.ShopifyAnalytics.meta.product.id;
+    }
+    if (window.meta && window.meta.product) return window.meta.product.id;
+    const m = location.pathname.match(/\/products\/([^/?#]+)/);
+    if (m) {
+      try {
+        const r = await fetch(`/products/${m[1]}.js`);
+        const p = await r.json();
+        return p.id;
+      } catch (e) {}
+    }
+    return null;
+  }
+
+  /* 2) Pide recomendaciones nativas (Shopify excluye el producto actual) */
+  async function loadRelated(productId) {
+    if (!productId) return [];
+    const url = `/recommendations/products.json?product_id=${productId}&limit=8&intent=related`;
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    const data = await r.json();
+    return (data.products || []).filter(p => String(p.id) !== String(productId));
+  }
+
+  /* 3) Render */
+  function card(p) {
+    const a = document.createElement("a");
+    a.className = "lal-card";
+    a.href = p.url || `/products/${p.handle}`;
+    a.dataset.productId = p.id;
+    a.innerHTML = `
+      <div class="lal-card__media">
+        <button class="lal-card__fav" type="button" aria-pressed="false" aria-label="Favorito">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+          </svg>
+        </button>
+        <img class="lal-card__img" src="${p.featured_image || (p.images && p.images[0]) || ''}" alt="${p.title}" loading="lazy" />
+      </div>
+      <div class="lal-card__body">
+        <div>
+          <h3 class="lal-card__name">${p.title}</h3>
+          <p class="lal-card__price">${money(p.price)}</p>
+        </div>
+        <button class="lal-card__cta" type="button" aria-pressed="false" data-variant-id="${(p.variants && p.variants[0] && p.variants[0].id) || ''}">
+          + AGREGAR
+        </button>
+      </div>
+    `;
+    return a;
+  }
+
+  function render(products) {
+    track.innerHTML = "";
+    if (!products.length) {
+      const li = document.createElement("li");
+      li.className = "lal-empty";
+      li.textContent = "Pronto tendremos más prendas para complementar tu look.";
+      track.appendChild(li);
+      return;
+    }
+    const frag = document.createDocumentFragment();
+    products.forEach(p => frag.appendChild(card(p)));
+    track.appendChild(frag);
+    updateNav();
+  }
+
+  /* 4) Carrusel + favoritos + add to cart */
+  const scrollAmount = () => {
+    const c = track.querySelector(".lal-card");
+    if (!c) return track.clientWidth;
+    const gap = parseFloat(getComputedStyle(track).columnGap || "20");
+    return c.getBoundingClientRect().width + gap;
+  };
+  function updateNav() {
+    const max = track.scrollWidth - track.clientWidth - 1;
+    prev.disabled = track.scrollLeft <= 0;
+    next.disabled = track.scrollLeft >= max;
+  }
+  prev.addEventListener("click", () => track.scrollBy({ left: -scrollAmount(), behavior: "smooth" }));
+  next.addEventListener("click", () => track.scrollBy({ left:  scrollAmount(), behavior: "smooth" }));
+  track.addEventListener("scroll", updateNav, { passive: true });
+  addEventListener("resize", updateNav);
+
+  track.addEventListener("click", async (e) => {
+    const fav = e.target.closest(".lal-card__fav");
+    if (fav) {
+      e.preventDefault();
+      fav.setAttribute("aria-pressed", fav.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      return;
+    }
+    const cta = e.target.closest(".lal-card__cta");
+    if (cta) {
+      e.preventDefault();
+      const variantId = cta.dataset.variantId;
+      if (!variantId) return;
+      cta.textContent = "Agregando...";
+      try {
+        const res = await fetch("/cart/add.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+        });
+        if (res.ok) {
+          cta.textContent = "✓ AGREGADO";
+          cta.setAttribute("aria-pressed", "true");
+          document.dispatchEvent(new CustomEvent("lal:cart-updated"));
+        } else {
+          cta.textContent = "+ AGREGAR";
+        }
+      } catch (err) {
+        cta.textContent = "+ AGREGAR";
+      }
+    }
+  });
+
+  /* 5) Bootstrap */
+  (async function init() {
+    const id = await getCurrentProductId();
+    const related = await loadRelated(id);
+    render(related);
+  })();
+})();
+</script>
