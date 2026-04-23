@@ -171,14 +171,70 @@
     return null;
   }
 
-  /* 2) Pide recomendaciones nativas (Shopify excluye el producto actual) */
-  async function loadRelated(productId) {
+  /* 2) Carga productos relacionados con 3 niveles de fallback:
+        a) Recomendaciones nativas de Shopify
+        b) Productos aleatorios de tu catálogo
+        c) Productos demo (para que veas el diseño en el builder de Instant) */
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /* Normaliza el formato de /products.json al formato que usa card() */
+  function normalizeFromProductsJson(p) {
+    const price = p.variants && p.variants[0] ? parseFloat(p.variants[0].price) * 100 : 0;
+    return {
+      id: p.id,
+      title: p.title,
+      handle: p.handle,
+      url: `/products/${p.handle}`,
+      price: price,
+      featured_image: (p.images && p.images[0] && (p.images[0].src || p.images[0])) || "",
+      variants: p.variants || [],
+    };
+  }
+
+  async function tryRecommendations(productId) {
     if (!productId) return [];
-    const url = `/recommendations/products.json?product_id=${productId}&limit=8&intent=related`;
-    const r = await fetch(url);
-    if (!r.ok) return [];
-    const data = await r.json();
-    return (data.products || []).filter(p => String(p.id) !== String(productId));
+    try {
+      const r = await fetch(`/recommendations/products.json?product_id=${productId}&limit=8&intent=related`);
+      if (!r.ok) return [];
+      const data = await r.json();
+      return (data.products || []).filter(p => String(p.id) !== String(productId));
+    } catch (e) { return []; }
+  }
+
+  async function tryAllProducts(productId) {
+    try {
+      const r = await fetch(`/products.json?limit=30`);
+      if (!r.ok) return [];
+      const data = await r.json();
+      const list = (data.products || [])
+        .filter(p => !productId || String(p.id) !== String(productId))
+        .map(normalizeFromProductsJson);
+      return shuffle(list).slice(0, 8);
+    } catch (e) { return []; }
+  }
+
+  /* Productos demo: aparecen SOLO si los 2 anteriores fallan.
+     Útil para ver el diseño en el builder de Instant. */
+  const DEMO = [
+    { id: "d1", title: "Cargo pant verde corazón lateral", handle: "#demo", price: 19990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#6b7a3a'/><stop offset='1' stop-color='#3a4618'/></linearGradient></defs><rect width='400' height='500' fill='url(#g)'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='rgba(255,255,255,.9)' text-anchor='middle' dominant-baseline='middle'>cargo verde</text></svg>"), variants: [] },
+    { id: "d2", title: "Glint denim pant", handle: "#demo", price: 19990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#2c2c2e'/><stop offset='1' stop-color='#0e0e10'/></linearGradient></defs><rect width='400' height='500' fill='url(#g)'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='rgba(255,255,255,.9)' text-anchor='middle' dominant-baseline='middle'>glint</text></svg>"), variants: [] },
+    { id: "d3", title: "Mom jean vintage azul claro", handle: "#demo", price: 18990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#8aa6c8'/><stop offset='1' stop-color='#4e6a8a'/></linearGradient></defs><rect width='400' height='500' fill='url(#g)'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='rgba(255,255,255,.9)' text-anchor='middle' dominant-baseline='middle'>mom jean</text></svg>"), variants: [] },
+    { id: "d4", title: "Short denim tiro alto", handle: "#demo", price: 13990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#7aa8d4'/><stop offset='1' stop-color='#3c5a7a'/></linearGradient></defs><rect width='400' height='500' fill='url(#g)'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='rgba(255,255,255,.9)' text-anchor='middle' dominant-baseline='middle'>short</text></svg>"), variants: [] },
+  ];
+
+  async function loadRelated(productId) {
+    const a = await tryRecommendations(productId);
+    if (a.length) return a;
+    const b = await tryAllProducts(productId);
+    if (b.length) return b;
+    return DEMO;
   }
 
   /* 3) Render */
