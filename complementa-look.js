@@ -11,15 +11,29 @@
    *   fetch(`/api/products/related?excludeId=${currentId}`)
    *     .then(r => r.json()).then(renderProducts);
    */
+  /** Placeholder SVG para el demo (sin dependencia de red) */
+  const ph = (c1, c2, label) =>
+    "data:image/svg+xml;utf8," +
+    encodeURIComponent(
+      `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'>
+        <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+          <stop offset='0' stop-color='${c1}'/><stop offset='1' stop-color='${c2}'/>
+        </linearGradient></defs>
+        <rect width='400' height='500' fill='url(#g)'/>
+        <text x='50%' y='50%' font-family='Inter, sans-serif' font-size='26' font-weight='700'
+              fill='rgba(255,255,255,0.9)' text-anchor='middle' dominant-baseline='middle'>${label}</text>
+      </svg>`
+    );
+
   const CATALOG = [
-    { id: "jean-wide-01",    name: "Jean wide leg tiro alto",        price: 229900, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600", category: "jeans" },
-    { id: "cargo-verde-01",  name: "Cargo pant verde corazón lateral", price: 199900, image: "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=600", category: "pants" },
-    { id: "glint-denim-01",  name: "Glint denim pant",                price: 199900, image: "https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=600", category: "jeans" },
-    { id: "mom-jean-01",     name: "Mom jean vintage azul claro",     price: 189900, image: "https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=600", category: "jeans" },
-    { id: "skinny-negro-01", name: "Skinny jean negro tiro medio",    price: 179900, image: "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600", category: "jeans" },
-    { id: "short-denim-01",  name: "Short denim tiro alto",           price: 139900, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600", category: "shorts" },
-    { id: "flare-blanco-01", name: "Flare jean blanco cintura alta",  price: 219900, image: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600", category: "jeans" },
-    { id: "top-crop-01",     name: "Top crop básico negro",           price:  89900, image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600", category: "tops" },
+    { id: "jean-wide-01",    name: "Jean wide leg tiro alto",         price: 229900, image: ph("#4a5a7a", "#1e2a44", "wide leg"), category: "jeans" },
+    { id: "cargo-verde-01",  name: "Cargo pant verde corazón lateral", price: 199900, image: ph("#6b7a3a", "#3a4618", "cargo"),    category: "pants" },
+    { id: "glint-denim-01",  name: "Glint denim pant",                 price: 199900, image: ph("#2c2c2e", "#0e0e10", "glint"),    category: "jeans" },
+    { id: "mom-jean-01",     name: "Mom jean vintage azul claro",      price: 189900, image: ph("#8aa6c8", "#4e6a8a", "mom jean"), category: "jeans" },
+    { id: "skinny-negro-01", name: "Skinny jean negro tiro medio",     price: 179900, image: ph("#2a2a2e", "#0a0a0c", "skinny"),   category: "jeans" },
+    { id: "short-denim-01",  name: "Short denim tiro alto",            price: 139900, image: ph("#7aa8d4", "#3c5a7a", "short"),    category: "shorts" },
+    { id: "flare-blanco-01", name: "Flare jean blanco cintura alta",   price: 219900, image: ph("#e6e6e0", "#b4b4a8", "flare"),    category: "jeans" },
+    { id: "top-crop-01",     name: "Top crop básico negro",            price:  89900, image: ph("#1a1a1c", "#000000", "top crop"), category: "tops" },
   ];
 
   const currencyCO = new Intl.NumberFormat("es-CO", {
