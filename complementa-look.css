@@ -1,0 +1,242 @@
+/* =========================================================
+   LAL Jeans — Complementa tu look
+   Tokens de marca
+   ========================================================= */
+:root {
+  --lal-bg: #f4f3d5;          /* crema de fondo */
+  --lal-surface: #ffffff;     /* tarjetas */
+  --lal-ink: #0a0a0a;         /* titulares */
+  --lal-text: #1f1f1f;
+  --lal-muted: #6b6b6b;
+  --lal-accent: #d7e34a;      /* lima/amarillo CTA */
+  --lal-accent-hover: #c7d43a;
+  --lal-nav: #3b3ba0;         /* flechas moradas */
+  --lal-nav-ink: #3b3ba0;
+  --lal-radius-card: 20px;
+  --lal-radius-btn: 14px;
+  --lal-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --lal-font: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--lal-font);
+  color: var(--lal-text);
+  background: #fff;
+}
+
+.page { max-width: 1200px; margin: 0 auto; }
+
+/* --- Demo del producto actual (sólo para pruebas) --- */
+.current-product {
+  padding: 32px 24px 8px;
+}
+.current-product__eyebrow {
+  margin: 0 0 4px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lal-muted);
+}
+.current-product__title {
+  margin: 0 0 4px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--lal-ink);
+}
+.current-product__price {
+  margin: 0 0 16px;
+  font-weight: 700;
+}
+.current-product__switcher {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+  color: var(--lal-muted);
+}
+.current-product__switcher select {
+  padding: 6px 10px;
+  border: 1px solid #e0e0d0;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+/* =========================================================
+   Sección Complementa tu look
+   ========================================================= */
+.complementa {
+  background: var(--lal-bg);
+  padding: 40px 0 48px;
+  margin-top: 24px;
+}
+.complementa__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+}
+.complementa__title {
+  margin: 0 0 24px;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--lal-ink);
+}
+
+/* Carrusel */
+.complementa__carousel {
+  position: relative;
+}
+.complementa__track {
+  list-style: none;
+  margin: 0;
+  padding: 4px 4px 12px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.complementa__track::-webkit-scrollbar { display: none; }
+
+@media (min-width: 700px) {
+  .complementa__track { grid-auto-columns: minmax(0, calc((100% - 20px) / 2)); }
+}
+@media (min-width: 1024px) {
+  .complementa__track { grid-auto-columns: minmax(0, calc((100% - 60px) / 4)); }
+}
+
+/* Flechas */
+.complementa__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #d9d6a8;
+  background: var(--lal-bg);
+  color: var(--lal-nav-ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.2s ease;
+}
+.complementa__nav svg { width: 22px; height: 22px; }
+.complementa__nav:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+.complementa__nav:disabled { opacity: 0.35; cursor: not-allowed; }
+.complementa__nav--prev { left: -8px; }
+.complementa__nav--next { right: -8px; }
+@media (min-width: 1024px) {
+  .complementa__nav--prev { left: -22px; }
+  .complementa__nav--next { right: -22px; }
+}
+
+/* =========================================================
+   Tarjeta de producto
+   ========================================================= */
+.card {
+  scroll-snap-align: start;
+  background: var(--lal-surface);
+  border-radius: var(--lal-radius-card);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 45% 1fr;
+  min-height: 230px;
+  box-shadow: var(--lal-shadow);
+}
+.card__media {
+  position: relative;
+  background: #eee;
+  overflow: hidden;
+}
+.card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.card:hover .card__img { transform: scale(1.03); }
+
+.card__fav {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.card__fav:hover { background: #fff; }
+.card__fav svg { width: 18px; height: 18px; color: #111; }
+.card__fav[aria-pressed="true"] svg { color: #e0245e; fill: #e0245e; }
+
+.card__body {
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card__name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2b2b2b;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card__price {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--lal-ink);
+}
+.card__cta {
+  border: none;
+  background: var(--lal-accent);
+  color: var(--lal-ink);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 12px 14px;
+  border-radius: var(--lal-radius-btn);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.card__cta:hover { background: var(--lal-accent-hover); }
+.card__cta:active { transform: scale(0.98); }
+.card__cta[aria-pressed="true"] {
+  background: var(--lal-ink);
+  color: var(--lal-accent);
+}
+
+/* Estado vacío */
+.complementa__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--lal-muted);
+  font-size: 14px;
+}

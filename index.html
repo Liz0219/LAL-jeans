@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAL Jeans — Complementa tu look</title>
+  <link rel="stylesheet" href="complementa-look.css" />
+</head>
+<body>
+  <main class="page">
+    <!-- Demo: simula la página de producto actual -->
+    <section class="current-product" aria-label="Producto actual">
+      <div class="current-product__info">
+        <p class="current-product__eyebrow">Estás viendo</p>
+        <h1 class="current-product__title" id="currentProductTitle">Jean wide leg tiro alto</h1>
+        <p class="current-product__price" id="currentProductPrice">$229.900</p>
+        <label class="current-product__switcher">
+          Cambiar producto actual:
+          <select id="currentProductSelect"></select>
+        </label>
+      </div>
+    </section>
+
+    <!-- Sección Complementa tu look -->
+    <section
+      class="complementa"
+      aria-labelledby="complementaTitle"
+      data-current-product-id=""
+    >
+      <div class="complementa__inner">
+        <h2 id="complementaTitle" class="complementa__title">Complementa tu look</h2>
+
+        <div class="complementa__carousel">
+          <button
+            class="complementa__nav complementa__nav--prev"
+            type="button"
+            aria-label="Ver productos anteriores"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <ul class="complementa__track" id="complementaTrack" role="list">
+            <!-- cards se inyectan con JS -->
+          </ul>
+
+          <button
+            class="complementa__nav complementa__nav--next"
+            type="button"
+            aria-label="Ver más productos"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="complementa-look.js"></script>
+</body>
+</html>
