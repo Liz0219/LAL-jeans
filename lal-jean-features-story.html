@@ -1,13 +1,12 @@
 <!--
   LAL Jeans — Pieza para Instagram Story (9:16, 1080x1920)
   =====================================================================
-  Todo escala proporcional al canvas gracias a container queries (cqw/cqh).
-  Se ve igual de bien en tu pantalla que exportado a 1080x1920.
+  Layout en 3 zonas claras (sin overlaps):
+    [ 0 - 24% ] HEADER: eyebrow + título
+    [ 24 - 80% ] ZONA DE CALLOUTS sobre la foto
+    [ 80 - 100% ] FOOTER: logo + tagline
 
-  EXPORTAR A PNG 1080x1920:
-    1) htmlcsstoimage.com: pega este HTML, viewport 1080x1920
-    2) Chrome: F12 → modo responsive → 1080x1920 → Cmd+Shift+P →
-       "Capture full size screenshot"
+  Todo en unidades cqw/cqh para escalar proporcional al canvas 9:16.
   =====================================================================
 -->
 <!DOCTYPE html>
@@ -27,7 +26,6 @@
     justify-content: center;
   }
 
-  /* Canvas 9:16 que se ajusta al viewport y mantiene proporción */
   .story {
     --lal-lime: #d7e34a;
     --lal-purple: #b4a0ff;
@@ -41,19 +39,13 @@
     background: #1a1a1a;
     box-shadow: 0 20px 80px rgba(0,0,0,0.5);
 
-    /* Activar container queries: todos los hijos con cqw/cqh escalan
-       con el tamaño real del canvas (no con el viewport) */
     container-type: size;
     container-name: story;
   }
   .story * { box-sizing: border-box; }
 
-  /* Si la ventana es muy angosta, ancho por 100vw y alto calculado */
   @media (max-aspect-ratio: 9/16) {
-    .story {
-      width: 100vw;
-      height: auto;
-    }
+    .story { width: 100vw; height: auto; }
   }
 
   /* ---- Foto de fondo ---- */
@@ -66,28 +58,29 @@
     object-position: center;
     display: block;
   }
-  .story__shade-top,
+
+  /* Banda oscura arriba (para header) y abajo (para footer) */
+  .story__shade-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 26cqh;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
   .story__shade-bottom {
     position: absolute;
-    left: 0; right: 0;
-    pointer-events: none;
+    bottom: 0; left: 0; right: 0;
+    height: 24cqh;
+    background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
     z-index: 1;
-  }
-  .story__shade-top {
-    top: 0;
-    height: 32cqh;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent);
-  }
-  .story__shade-bottom {
-    bottom: 0;
-    height: 32cqh;
-    background: linear-gradient(to top, rgba(0,0,0,0.78), transparent);
+    pointer-events: none;
   }
 
-  /* ---- Header ---- */
+  /* ---- HEADER (zona 0 - 24%) ---- */
   .story__header {
     position: absolute;
-    top: 7cqh;
+    top: 4.5cqh;
     left: 6cqw;
     right: 6cqw;
     z-index: 3;
@@ -98,21 +91,21 @@
     display: inline-block;
     background: var(--lal-lime);
     color: var(--lal-ink);
-    font-size: 2.1cqw;
+    font-size: 1.9cqw;
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    padding: 1cqw 2.2cqw;
+    padding: 1cqw 2.4cqw;
     border-radius: 999px;
-    margin: 0 0 2.4cqh;
+    margin: 0 0 1.6cqh;
   }
   .story__title {
-    font-size: 6.2cqw;
+    font-size: 4.8cqw;
     font-weight: 900;
-    line-height: 1.02;
+    line-height: 1.04;
     letter-spacing: -0.02em;
     margin: 0;
-    text-shadow: 0 0.4cqw 1.8cqw rgba(0,0,0,0.55);
+    text-shadow: 0 0.3cqw 1.4cqw rgba(0,0,0,0.65);
   }
   .story__title em {
     font-family: Georgia, "Times New Roman", serif;
@@ -120,18 +113,18 @@
     font-weight: 800;
   }
 
-  /* ---- Callouts ---- */
+  /* ---- CALLOUTS (zona 26 - 78%) ---- */
   .cue {
     position: absolute;
     display: flex;
     align-items: center;
-    gap: 1.8cqw;
+    gap: 1.5cqw;
     color: #fff;
     font-weight: 800;
-    font-size: 3.1cqw;
+    font-size: 2.6cqw;
     line-height: 1.1;
-    text-shadow: 0 0.3cqw 1.4cqw rgba(0,0,0,0.7);
-    max-width: 40cqw;
+    text-shadow: 0 0.3cqw 1cqw rgba(0,0,0,0.8);
+    max-width: 36cqw;
     z-index: 3;
   }
   .cue--right {
@@ -140,34 +133,34 @@
   }
   .cue__badge {
     flex-shrink: 0;
-    width: 6.5cqw; height: 6.5cqw;
+    width: 5.5cqw; height: 5.5cqw;
     border-radius: 50%;
     background: var(--lal-lime);
     color: var(--lal-ink);
     font-family: Georgia, "Times New Roman", serif;
     font-style: italic;
     font-weight: 900;
-    font-size: 2.9cqw;
+    font-size: 2.4cqw;
     display: flex;
     align-items: center;
     justify-content: center;
     text-shadow: none;
-    box-shadow: 0 0.7cqw 2cqw rgba(0,0,0,0.5);
-    border: 0.28cqw solid rgba(255,255,255,0.95);
+    box-shadow: 0 0.5cqw 1.6cqw rgba(0,0,0,0.5);
+    border: 0.22cqw solid rgba(255,255,255,0.95);
   }
   .cue--purple .cue__badge { background: var(--lal-purple); }
 
-  /* Posiciones (usando % del canvas) */
-  .cue--1 { top: 30cqh; left: 5.5cqw; }
-  .cue--2 { top: 43cqh; right: 5.5cqw; }
-  .cue--3 { top: 56cqh; left: 5.5cqw; }
-  .cue--4 { top: 66cqh; right: 5.5cqw; }
-  .cue--5 { top: 76cqh; left: 5.5cqw; }
+  /* 5 callouts repartidos entre 28% y 74% vertical */
+  .cue--1 { top: 28cqh; left: 6cqw; }
+  .cue--2 { top: 39cqh; right: 6cqw; }
+  .cue--3 { top: 51cqh; left: 6cqw; }
+  .cue--4 { top: 62cqh; right: 6cqw; }
+  .cue--5 { top: 73cqh; left: 6cqw; }
 
-  /* ---- Footer ---- */
+  /* ---- FOOTER (zona 82 - 100%) ---- */
   .story__footer {
     position: absolute;
-    bottom: 8cqh;
+    bottom: 5cqh;
     left: 6cqw;
     right: 6cqw;
     z-index: 3;
@@ -176,19 +169,21 @@
   }
   .story__logo {
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 5.2cqw;
+    font-size: 4.4cqw;
     font-weight: 900;
-    letter-spacing: 0.02em;
-    margin: 0 0 0.6cqh;
-    text-shadow: 0 0.3cqw 1.6cqw rgba(0,0,0,0.6);
+    letter-spacing: 0.04em;
+    margin: 0 0 0.4cqh;
+    text-shadow: 0 0.3cqw 1.2cqw rgba(0,0,0,0.65);
+    line-height: 1;
   }
   .story__tagline {
-    font-size: 2cqw;
+    font-size: 1.7cqw;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     opacity: 0.9;
     margin: 0;
+    line-height: 1.2;
   }
 </style>
 </head>
@@ -203,11 +198,13 @@
   <div class="story__shade-top"></div>
   <div class="story__shade-bottom"></div>
 
+  <!-- HEADER -->
   <div class="story__header">
     <span class="story__eyebrow">Por qué elegir LALÍ</span>
-    <h1 class="story__title">Cada detalle,<br><em>pensado en ti.</em></h1>
+    <h1 class="story__title">Cada detalle, <em>pensado en ti.</em></h1>
   </div>
 
+  <!-- CALLOUTS -->
   <div class="cue cue--1">
     <span class="cue__badge">1</span>
     <span>Cintura alta<br>que estiliza</span>
@@ -233,9 +230,10 @@
     <span>Ajuste<br>personalizado</span>
   </div>
 
+  <!-- FOOTER -->
   <div class="story__footer">
     <p class="story__logo">LALÍ</p>
-    <p class="story__tagline">Jeans personalizados · lalijeans.com</p>
+    <p class="story__tagline">lalijeans.com</p>
   </div>
 
 </div>
