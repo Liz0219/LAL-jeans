@@ -23,6 +23,24 @@
     padding: 0 18px;
   }
 
+  .lal-press__title {
+    margin: 0 0 14px !important;
+    padding: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.15 !important;
+    color: #0a0a0a !important;
+    text-align: left !important;
+    text-transform: none !important;
+  }
+  .lal-press__title span {
+    background: linear-gradient(to top, rgba(215, 227, 74, 0.6) 45%, transparent 45%);
+    padding: 0 4px;
+  }
+
   .lal-press__card {
     position: relative;
     background: #ffffff;
@@ -124,11 +142,16 @@
     .lal-press__card { padding: 16px 16px 14px; }
     .lal-press__brand { font-size: 16px !important; }
     .lal-press__headline { font-size: 14px !important; }
+    .lal-press__title { font-size: 19px !important; }
   }
 </style>
 
-<section class="lal-press" aria-labelledby="lal-press-headline">
+<section class="lal-press" aria-labelledby="lal-press-title">
   <div class="lal-press__inner">
+    <h2 id="lal-press-title" class="lal-press__title">
+      Lo que dice la <span>prensa nacional</span> de LALÍ
+    </h2>
+
     <article class="lal-press__card">
       <header class="lal-press__masthead">
         <span class="lal-press__eyebrow">Destacadas en</span>
