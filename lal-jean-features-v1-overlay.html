@@ -39,10 +39,16 @@
     overflow: hidden;
     aspect-ratio: 3/4;
     background-color: #1a1a1a;
-    background-image: var(--lal-feature-photo);
-    background-size: cover;
-    background-position: center;
     box-shadow: 0 20px 60px -20px rgba(0,0,0,0.3);
+  }
+  .lal-feat-ov__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   /* ---- Cues (callouts sobre la foto) ---- */
@@ -113,7 +119,10 @@
 
 <section class="lal-feat-ov">
   <div class="lal-feat-ov__container">
-    <div class="lal-feat-ov__photo" role="img" aria-label="Jean LALÍ — características">
+    <div class="lal-feat-ov__photo">
+      <img class="lal-feat-ov__img"
+           src="https://cdn.shopify.com/s/files/1/0666/3458/0146/files/Sin-titulo-15.jpg?v=1764094550"
+           alt="Jean LALÍ — características">
 
       <div class="lal-feat-ov__cue lal-feat-ov__cue--1">
         <span class="lal-feat-ov__badge">1</span>

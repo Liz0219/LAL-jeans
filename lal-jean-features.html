@@ -86,9 +86,15 @@
     overflow: hidden;
     aspect-ratio: 4/5;
     background-color: #1a1a1a;
-    background-image: var(--lal-feature-photo);
-    background-size: cover;
-    background-position: center;
+  }
+  .lal-feat__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
   .lal-feat__list {
     list-style: none;
@@ -227,7 +233,11 @@
     </h2>
 
     <div class="lal-feat__grid">
-      <div class="lal-feat__photo" role="img" aria-label="Jean LALÍ detalle de silueta"></div>
+      <div class="lal-feat__photo">
+        <img class="lal-feat__img"
+             src="https://cdn.shopify.com/s/files/1/0666/3458/0146/files/Sin-titulo-15.jpg?v=1764094550"
+             alt="Jean LALÍ detalle de silueta">
+      </div>
 
       <ol class="lal-feat__list">
         <li class="lal-feat__item">
