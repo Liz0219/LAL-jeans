@@ -1,0 +1,258 @@
+<!--
+  LAL Jeans — Pieza para Instagram Story
+  =====================================================================
+  Formato 1080 x 1920 (9:16) con zonas seguras:
+  - Top ~250px: reservado para header de IG (avatar, username)
+  - Bottom ~250px: reservado para CTA / reply bar
+  - Los callouts están posicionados dentro del área visible central.
+
+  EXPORTAR A PNG 1080x1920:
+  - Abre este archivo en Chrome
+  - Click derecho → Inspeccionar → ícono de dispositivo (Toggle device
+    toolbar) → escribe tamaño personalizado 1080 x 1920
+  - O usa htmlcsstoimage.com con viewport 1080x1920
+  =====================================================================
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>LALÍ — Story</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #2a2a2a;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Marco 9:16 — siempre mantiene proporción de story */
+  .story {
+    --lal-lime: #d7e34a;
+    --lal-purple: #b4a0ff;
+    --lal-ink: #0a0a0a;
+
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    max-width: 100vw;
+    max-height: 100vh;
+    aspect-ratio: 9/16;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.4);
+
+    /* Escala automática para que quepa en la pantalla al previsualizar */
+    transform-origin: top center;
+  }
+  .story * { box-sizing: border-box; }
+
+  /* Foto de fondo que llena toda la story */
+  .story__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  /* Gradient sutil arriba y abajo para legibilidad */
+  .story__shade-top,
+  .story__shade-bottom {
+    position: absolute;
+    left: 0; right: 0;
+    height: 30%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .story__shade-top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent);
+  }
+  .story__shade-bottom {
+    bottom: 0;
+    height: 35%;
+    background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  }
+
+  /* ---- HEADER superior (dentro de zona segura) ---- */
+  .story__header {
+    position: absolute;
+    top: 120px;
+    left: 60px;
+    right: 60px;
+    z-index: 3;
+    color: #fff;
+    text-align: center;
+  }
+  .story__eyebrow {
+    display: inline-block;
+    background: var(--lal-lime);
+    color: var(--lal-ink);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 999px;
+    margin: 0 0 24px;
+  }
+  .story__title {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .story__title em {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  /* ---- Callouts numerados ---- */
+  .cue {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 1.1;
+    text-shadow: 0 3px 16px rgba(0,0,0,0.65);
+    max-width: 420px;
+    z-index: 3;
+  }
+  .cue--right {
+    flex-direction: row-reverse;
+    text-align: right;
+  }
+  .cue__badge {
+    flex-shrink: 0;
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--lal-lime);
+    color: var(--lal-ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    border: 3px solid rgba(255,255,255,0.95);
+  }
+  .cue--purple .cue__badge {
+    background: var(--lal-purple);
+  }
+
+  /* Posiciones dentro de zona segura (entre 420 y 1500 px verticales) */
+  .cue--1 { top: 540px;  left: 60px; }
+  .cue--2 { top: 780px;  right: 60px; }
+  .cue--3 { top: 1020px; left: 60px; }
+  .cue--4 { top: 1200px; right: 60px; }
+  .cue--5 { top: 1400px; left: 60px; }
+
+  /* ---- Footer / CTA ---- */
+  .story__footer {
+    position: absolute;
+    bottom: 140px;
+    left: 60px;
+    right: 60px;
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+  }
+  .story__logo {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    margin: 0 0 12px;
+    color: #fff;
+  }
+  .story__tagline {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  /* ---- Preview responsive: escala la story al tamaño de pantalla ---- */
+  @media (max-aspect-ratio: 9/16) {
+    .story {
+      width: 100vw;
+      height: calc(100vw * 16 / 9);
+    }
+  }
+  @media (min-aspect-ratio: 9/16) {
+    .story {
+      height: 100vh;
+      width: calc(100vh * 9 / 16);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="story">
+
+  <img class="story__bg"
+       src="https://cdn.shopify.com/s/files/1/0666/3458/0146/files/Sin-titulo-15.jpg?v=1764094550"
+       alt="Jean LALÍ">
+
+  <div class="story__shade-top"></div>
+  <div class="story__shade-bottom"></div>
+
+  <!-- Header -->
+  <div class="story__header">
+    <span class="story__eyebrow">Por qué elegir LALÍ</span>
+    <h1 class="story__title">Cada detalle,<br><em>pensado en ti.</em></h1>
+  </div>
+
+  <!-- Callouts -->
+  <div class="cue cue--1">
+    <span class="cue__badge">1</span>
+    <span>Cintura alta<br>que estiliza</span>
+  </div>
+
+  <div class="cue cue--purple cue--right cue--2">
+    <span class="cue__badge">2</span>
+    <span>Fit que realza<br>la silueta</span>
+  </div>
+
+  <div class="cue cue--3">
+    <span class="cue__badge">3</span>
+    <span>Hecho en<br>Colombia</span>
+  </div>
+
+  <div class="cue cue--purple cue--right cue--4">
+    <span class="cue__badge">4</span>
+    <span>Denim<br>premium</span>
+  </div>
+
+  <div class="cue cue--5">
+    <span class="cue__badge">5</span>
+    <span>Ajuste<br>personalizado</span>
+  </div>
+
+  <!-- Footer -->
+  <div class="story__footer">
+    <p class="story__logo">LALÍ</p>
+    <p class="story__tagline">Jeans personalizados · lalijeans.com</p>
+  </div>
+
+</div>
+
+</body>
+</html>
