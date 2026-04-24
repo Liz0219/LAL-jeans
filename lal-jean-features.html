@@ -1,0 +1,306 @@
+<!--
+  LAL Jeans — Pieza gráfica "Características del jean"
+  =====================================================================
+  Dos variantes:
+  V1) Overlay sobre la foto (estilo post/social) — numbered badges +
+      flechas curvas SVG. Ideal para Instagram/contenido visual.
+  V2) Layout editorial lado a lado (foto + lista numerada) — ideal para
+      página web / producto. Totalmente responsive.
+
+  PERSONALIZAR:
+  1) Cambia --lal-feature-photo por la URL de tu foto (Shopify Files).
+  2) Edita los textos / íconos dentro de cada <li> o <div class="cue">.
+
+  EXPORTAR A PNG/JPG:
+  - Abre el archivo en Chrome
+  - Click derecho → "Inspeccionar" → selecciona el <section>
+  - O usa extensión "GoFullPage" / servicio htmlcsstoimage.com
+  =====================================================================
+-->
+
+<style>
+  :root {
+    --lal-lime: #d7e34a;
+    --lal-purple: #b4a0ff;
+    --lal-ink: #0a0a0a;
+    --lal-cream: #efe9df;
+    --lal-feature-photo: url("https://cdn.shopify.com/s/files/1/0666/3458/0146/files/jean-features.jpg");
+  }
+
+  .lal-feat,
+  .lal-feat * { box-sizing: border-box; }
+  .lal-feat {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--lal-ink);
+    background: var(--lal-cream);
+    padding: 48px 0;
+  }
+  .lal-feat__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .lal-feat__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lal-ink);
+    margin: 0 0 10px;
+  }
+  .lal-feat__eyebrow::before {
+    content: "";
+    width: 24px; height: 2px;
+    background: var(--lal-purple);
+    display: inline-block;
+  }
+  .lal-feat__headline {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0 0 32px;
+    max-width: 18ch;
+  }
+  .lal-feat__headline em {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  /* ================================================================
+     V2 — Layout editorial (foto + lista numerada)
+     ================================================================ */
+  .lal-feat__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+  .lal-feat__photo {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background-color: #1a1a1a;
+    background-image: var(--lal-feature-photo);
+    background-size: cover;
+    background-position: center;
+  }
+  .lal-feat__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .lal-feat__item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 8px 20px -12px rgba(0,0,0,0.08);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .lal-feat__item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 14px 30px -14px rgba(0,0,0,0.18);
+  }
+  .lal-feat__badge {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--lal-lime);
+    color: var(--lal-ink);
+    font-weight: 900;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-family: Georgia, serif;
+    font-style: italic;
+  }
+  .lal-feat__item:nth-child(even) .lal-feat__badge {
+    background: var(--lal-purple);
+  }
+  .lal-feat__text h3 {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 3px;
+    color: var(--lal-ink);
+  }
+  .lal-feat__text p {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #4a4a4a;
+    margin: 0;
+  }
+
+  @media (min-width: 900px) {
+    .lal-feat { padding: 72px 0; }
+    .lal-feat__headline { font-size: 44px; margin-bottom: 40px; }
+    .lal-feat__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    .lal-feat__photo { aspect-ratio: 4/5; max-height: 720px; }
+    .lal-feat__item { padding: 18px 22px; }
+    .lal-feat__badge { width: 48px; height: 48px; font-size: 18px; }
+    .lal-feat__text h3 { font-size: 17px; }
+    .lal-feat__text p { font-size: 14px; }
+  }
+  @media (min-width: 1200px) {
+    .lal-feat__headline { font-size: 52px; }
+  }
+
+  /* ================================================================
+     V1 — Overlay estilo post social (versión alternativa)
+     Activa esta sección comentando V2 y descomentando V1
+     ================================================================ */
+  .lal-feat--overlay .lal-feat__photo {
+    aspect-ratio: 3/4;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .lal-feat__cues {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .lal-feat__cue {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 1.15;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+    max-width: 200px;
+  }
+  .lal-feat__cue-badge {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--lal-lime);
+    color: var(--lal-ink);
+    font-weight: 900;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-style: italic;
+    text-shadow: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  }
+  .lal-feat__cue--p .lal-feat__cue-badge { background: var(--lal-purple); }
+  .lal-feat__cue--1 { top: 10%; left: 4%; }
+  .lal-feat__cue--2 { top: 32%; right: 4%; text-align: right; flex-direction: row-reverse; }
+  .lal-feat__cue--3 { top: 55%; left: 4%; }
+  .lal-feat__cue--4 { top: 68%; right: 4%; text-align: right; flex-direction: row-reverse; }
+  .lal-feat__cue--5 { top: 85%; left: 4%; }
+
+  @media (max-width: 600px) {
+    .lal-feat__cue { font-size: 12px; max-width: 140px; gap: 6px; }
+    .lal-feat__cue-badge { width: 26px; height: 26px; font-size: 11px; }
+  }
+</style>
+
+<!-- =============================================================
+     V2 — EDITORIAL (recomendado para página web)
+     ============================================================= -->
+<section class="lal-feat" aria-labelledby="lal-feat-title">
+  <div class="lal-feat__container">
+    <p class="lal-feat__eyebrow">Por qué elegir LALÍ</p>
+    <h2 id="lal-feat-title" class="lal-feat__headline">
+      Cada detalle, <em>pensado en ti.</em>
+    </h2>
+
+    <div class="lal-feat__grid">
+      <div class="lal-feat__photo" role="img" aria-label="Jean LALÍ detalle de silueta"></div>
+
+      <ol class="lal-feat__list">
+        <li class="lal-feat__item">
+          <div class="lal-feat__badge">1</div>
+          <div class="lal-feat__text">
+            <h3>Cintura alta que estiliza</h3>
+            <p>Corte pensado para alargar la figura y marcar tu silueta sin aprietos.</p>
+          </div>
+        </li>
+        <li class="lal-feat__item">
+          <div class="lal-feat__badge">2</div>
+          <div class="lal-feat__text">
+            <h3>Fit que realza la silueta</h3>
+            <p>Patronaje exclusivo que se adapta a ti, no a la talla estándar.</p>
+          </div>
+        </li>
+        <li class="lal-feat__item">
+          <div class="lal-feat__badge">3</div>
+          <div class="lal-feat__text">
+            <h3>Diseño hecho en Colombia</h3>
+            <p>Confeccionado con manos colombianas y amor por el detalle artesanal.</p>
+          </div>
+        </li>
+        <li class="lal-feat__item">
+          <div class="lal-feat__badge">4</div>
+          <div class="lal-feat__text">
+            <h3>Denim premium</h3>
+            <p>Tela de alta densidad que mantiene forma, color y caída lavado tras lavado.</p>
+          </div>
+        </li>
+        <li class="lal-feat__item">
+          <div class="lal-feat__badge">5</div>
+          <div class="lal-feat__text">
+            <h3>Ajuste personalizado</h3>
+            <p>Largo ajustado sin costo y regalo sorpresa en cada pedido.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================================
+     V1 — OVERLAY (estilo post social / Instagram)
+     Úsalo si quieres la pieza como la original pero mejorada.
+     ============================================================= -->
+<!--
+<section class="lal-feat lal-feat--overlay">
+  <div class="lal-feat__container">
+    <div class="lal-feat__photo">
+      <div class="lal-feat__cues">
+        <div class="lal-feat__cue lal-feat__cue--1">
+          <span class="lal-feat__cue-badge">1</span>
+          <span>Cintura alta<br>que estiliza</span>
+        </div>
+        <div class="lal-feat__cue lal-feat__cue--p lal-feat__cue--2">
+          <span class="lal-feat__cue-badge">2</span>
+          <span>Fit que realza<br>la silueta</span>
+        </div>
+        <div class="lal-feat__cue lal-feat__cue--3">
+          <span class="lal-feat__cue-badge">3</span>
+          <span>Diseño hecho<br>en Colombia</span>
+        </div>
+        <div class="lal-feat__cue lal-feat__cue--p lal-feat__cue--4">
+          <span class="lal-feat__cue-badge">4</span>
+          <span>Denim<br>premium</span>
+        </div>
+        <div class="lal-feat__cue lal-feat__cue--5">
+          <span class="lal-feat__cue-badge">5</span>
+          <span>Ajuste<br>personalizado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
