@@ -1,246 +1,161 @@
 <!--
-  LAL Jeans — Bloque de prensa "El Espectador"
+  LAL Jeans — Bloque de prensa "El Espectador" (compacto)
   =====================================================================
-  CONCEPTO: cita editorial de autoridad, NO banner comercial.
-  Usa el peso de un medio nacional para generar confianza y cerrar
-  la venta en compradoras indecisas.
+  Versión optimizada para convertir sin ocupar demasiado vertical.
+  Conserva la autoridad editorial con menos peso visual.
 
   DÓNDE PEGAR:
   - Instant.so: Custom HTML block, ARRIBA de "Complementa tu look".
-  - Shopify theme: snippet independiente.
-
-  PERSONALIZAR:
-  1) Cambia la URL del <a> por el link real del artículo.
-  2) Si sale en más medios, duplica el bloque .lal-press__feature.
   =====================================================================
 -->
 
 <style>
   .lal-press {
     background: #ffffff;
-    padding: 48px 0;
+    padding: 20px 0 24px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #1a1a1a;
   }
   .lal-press * { box-sizing: border-box; }
   .lal-press__inner {
-    max-width: 720px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .lal-press__eyebrow {
-    margin: 0 0 14px !important;
-    text-align: center;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.22em !important;
-    text-transform: uppercase !important;
-    color: #8a8a8a !important;
-    line-height: 1 !important;
-  }
-  .lal-press__eyebrow::before,
-  .lal-press__eyebrow::after {
-    content: "";
-    display: inline-block;
-    width: 32px;
-    height: 1px;
-    background: #c92026;
-    vertical-align: middle;
-    margin: 0 10px;
+    padding: 0 18px;
   }
 
   .lal-press__card {
     position: relative;
     background: #ffffff;
     border: 1px solid #ececec;
-    border-top: 4px solid #c92026;
+    border-top: 3px solid #c92026;
     border-radius: 6px;
-    padding: 32px 28px 28px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    padding: 18px 20px 16px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
   }
 
-  /* Masthead tipo periódico */
   .lal-press__masthead {
-    text-align: center;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #e5e5e5;
-    margin-bottom: 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 12px;
+  }
+  .lal-press__eyebrow {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    color: #8a8a8a !important;
+    line-height: 1 !important;
+    margin: 0 !important;
   }
   .lal-press__brand {
-    display: block;
-    font-family: "Playfair Display", "Times New Roman", Georgia, serif;
-    font-size: 30px;
-    font-weight: 900;
-    letter-spacing: 0.01em;
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif !important;
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.005em !important;
     color: #0a0a0a !important;
-    line-height: 1;
+    line-height: 1 !important;
     font-style: normal !important;
   }
-  .lal-press__section-tag {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #6b6b6b;
-    font-weight: 700;
-  }
-  .lal-press__section-tag::before { content: "›  "; color: #c92026; font-weight: 900; }
 
-  /* Headline del artículo */
   .lal-press__headline {
-    margin: 0 0 8px !important;
-    font-family: "Playfair Display", "Times New Roman", Georgia, serif !important;
-    font-size: 22px !important;
-    font-weight: 800 !important;
-    line-height: 1.25 !important;
-    color: #0a0a0a !important;
-    text-align: left !important;
-    letter-spacing: -0.005em !important;
-  }
-  .lal-press__byline {
-    margin: 0 0 20px !important;
-    font-size: 12px !important;
-    color: #8a8a8a !important;
-    font-style: italic !important;
-    line-height: 1.4 !important;
-  }
-  .lal-press__byline strong { font-style: normal; color: #0a0a0a; font-weight: 700; }
-
-  /* Pull quote */
-  .lal-press__pullquote {
-    margin: 0 0 22px !important;
-    padding: 4px 0 4px 18px !important;
+    margin: 0 0 6px !important;
+    padding: 0 0 0 12px !important;
     border-left: 3px solid #c92026 !important;
     font-family: Georgia, "Times New Roman", serif !important;
-    font-size: 20px !important;
-    font-weight: 500 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
     font-style: italic !important;
     line-height: 1.35 !important;
     color: #0a0a0a !important;
-    quotes: "“" "”";
+    text-align: left !important;
+    letter-spacing: 0 !important;
   }
-  .lal-press__pullquote::before { content: open-quote; margin-right: 2px; }
-  .lal-press__pullquote::after  { content: close-quote; margin-left: 2px; }
 
-  /* Párrafo de apoyo */
+  .lal-press__meta {
+    margin: 0 0 12px !important;
+    padding-left: 12px !important;
+    font-size: 11px !important;
+    color: #8a8a8a !important;
+    line-height: 1.4 !important;
+    font-style: normal !important;
+  }
+  .lal-press__meta strong { color: #0a0a0a; font-weight: 700; }
+
   .lal-press__body {
-    margin: 0 0 22px !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
+    margin: 0 0 14px !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
     color: #333 !important;
   }
   .lal-press__body strong {
     color: #0a0a0a;
     font-weight: 700;
-    background: linear-gradient(to top, rgba(215, 227, 74, 0.45) 40%, transparent 40%);
+    background: linear-gradient(to top, rgba(215, 227, 74, 0.55) 45%, transparent 45%);
     padding: 0 2px;
   }
 
-  /* CTA de verificación */
-  .lal-press__verify {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding-top: 18px;
-    border-top: 1px dashed #e0e0e0;
-  }
-  .lal-press__verify-text {
-    margin: 0;
-    font-size: 12px;
-    color: #8a8a8a;
-    line-height: 1.4;
-  }
   .lal-press__link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
+    gap: 5px;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
     color: #0a0a0a !important;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    padding: 8px 14px;
-    border-radius: 999px;
-    border: 1.5px solid #0a0a0a;
+    letter-spacing: 0.02em !important;
+    padding: 7px 12px !important;
+    border-radius: 999px !important;
+    border: 1.5px solid #0a0a0a !important;
     transition: background 0.2s ease, color 0.2s ease;
+    line-height: 1 !important;
   }
   .lal-press__link:hover {
     background: #0a0a0a;
     color: #fff !important;
   }
-  .lal-press__link svg { width: 14px; height: 14px; }
+  .lal-press__link svg { width: 12px; height: 12px; }
 
-  /* Tagline de cierre (trigger emocional) */
-  .lal-press__tagline {
-    margin: 22px 0 0 !important;
-    text-align: center;
-    font-size: 13px !important;
-    color: #6b6b6b !important;
-    line-height: 1.5 !important;
-    font-style: italic !important;
-  }
-  .lal-press__tagline strong { color: #0a0a0a; font-weight: 700; font-style: normal; }
-
-  /* Responsive */
   @media (max-width: 600px) {
-    .lal-press { padding: 36px 0; }
-    .lal-press__card { padding: 26px 20px 22px; }
-    .lal-press__brand { font-size: 24px; }
-    .lal-press__headline { font-size: 18px !important; }
-    .lal-press__pullquote { font-size: 17px !important; padding-left: 14px !important; }
-    .lal-press__body { font-size: 14px !important; }
-    .lal-press__verify { flex-direction: column; align-items: flex-start; }
+    .lal-press { padding: 16px 0 20px; }
+    .lal-press__card { padding: 16px 16px 14px; }
+    .lal-press__brand { font-size: 16px !important; }
+    .lal-press__headline { font-size: 14px !important; }
   }
 </style>
 
 <section class="lal-press" aria-labelledby="lal-press-headline">
   <div class="lal-press__inner">
-    <p class="lal-press__eyebrow">Como nos vio la prensa</p>
-
     <article class="lal-press__card">
       <header class="lal-press__masthead">
+        <span class="lal-press__eyebrow">Destacadas en</span>
         <span class="lal-press__brand">El Espectador</span>
-        <span class="lal-press__section-tag">Emprendimiento y liderazgo</span>
       </header>
 
       <h2 id="lal-press-headline" class="lal-press__headline">
-        Las hermanas detrás de una marca de jeans personalizados con estilo y creatividad
+        “Las hermanas detrás de una marca de jeans personalizados con estilo y creatividad”
       </h2>
-      <p class="lal-press__byline">
-        Por <strong>Tatiana Gómez Fuentes</strong> · 20 de noviembre de 2024
+      <p class="lal-press__meta">
+        <strong>Emprendimiento y Liderazgo</strong> · 20 de noviembre de 2024
       </p>
-
-      <blockquote class="lal-press__pullquote">
-        En LALÍ Jeans hacemos más que diseñar jeans: creamos experiencias únicas para mujeres que buscan calidad, estilo y prendas que se adapten perfectamente.
-      </blockquote>
 
       <p class="lal-press__body">
-        Su negocio ya tiene presencia en <strong>Guatemala</strong> y <strong>México</strong>, y se están preparando para entrar al mercado de <strong>Estados Unidos en 2025</strong>.
+        Ya con presencia en <strong>Guatemala</strong> y <strong>México</strong>, preparándonos para entrar a <strong>Estados Unidos en 2025</strong>.
       </p>
 
-      <div class="lal-press__verify">
-        <p class="lal-press__verify-text">
-          Publicación editorial verificable en el sitio oficial de El Espectador.
-        </p>
-        <a class="lal-press__link"
-           href="https://www.elespectador.com/"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="Leer el artículo completo en El Espectador">
-          Leer artículo
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 17L17 7M9 7h8v8"/>
-          </svg>
-        </a>
-      </div>
+      <a class="lal-press__link"
+         href="https://www.elespectador.com/economia/emprendimiento-y-liderazgo/las-hermanas-detras-de-una-marca-de-jeans-personalizados-con-estilo-y-creatividad/"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Leer el artículo completo en El Espectador">
+        Leer artículo
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17L17 7M9 7h8v8"/>
+        </svg>
+      </a>
     </article>
-
-    <p class="lal-press__tagline">
-      Miles de mujeres ya confían en LALÍ. <strong>Tu jean perfecto te está esperando.</strong>
-    </p>
   </div>
 </section>
