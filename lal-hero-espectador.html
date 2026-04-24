@@ -1,0 +1,299 @@
+<!--
+  LAL Jeans — Bloque de prensa "El Espectador" estilo hero editorial
+  =====================================================================
+  Versión responsive:
+  - Mobile (< 700px): layout vertical compacto, imagen más pequeña para
+    no ocupar toda la pantalla del iPhone 15 Pro Max.
+  - Tablet / Desktop (>= 900px): layout de 2 columnas lado a lado
+    (tarjeta lima a la izquierda, foto a la derecha) con un tamaño
+    máximo generoso para verse bien en pantallas grandes.
+
+  PERSONALIZAR:
+  1) Cambia --lal-hero-photo por la URL real de la foto (Shopify Files).
+  2) Opcional: ajusta headline en el <h2>.
+  =====================================================================
+-->
+
+<style>
+  .lal-hero {
+    --lal-lime: #d7e34a;
+    --lal-ink: #0a0a0a;
+    --lal-red: #c92026;
+    /* Foto de Cami y Liz (Shopify Files) */
+    --lal-hero-photo: url("https://cdn.shopify.com/s/files/1/0666/3458/0146/files/hermanas.jpg?v=1776995802");
+
+    padding: 16px 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+  }
+  .lal-hero * { box-sizing: border-box; }
+
+  .lal-hero__inner {
+    /* Mobile: más angosto para no ocupar toda la pantalla */
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 16px;
+    position: relative;
+  }
+
+  /* ---- Tarjeta lima con "scoop" curvo en el centro inferior ---- */
+  .lal-hero__card {
+    background: var(--lal-lime);
+    border-radius: 20px;
+    padding: 22px 20px 48px;
+    position: relative;
+    z-index: 1;
+    -webkit-mask-image: radial-gradient(circle 48px at 50% 100%, transparent 40px, black 41px);
+            mask-image: radial-gradient(circle 48px at 50% 100%, transparent 40px, black 41px);
+  }
+
+  .lal-hero__eyebrow {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    color: var(--lal-ink) !important;
+    line-height: 1 !important;
+  }
+  .lal-hero__eyebrow::before {
+    content: "";
+    width: 20px; height: 2px;
+    background: var(--lal-red);
+    display: inline-block;
+  }
+
+  .lal-hero__title {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    letter-spacing: -0.015em !important;
+    line-height: 1.08 !important;
+    color: var(--lal-ink) !important;
+    text-align: left !important;
+    text-transform: none !important;
+  }
+  .lal-hero__title em {
+    font-style: italic !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-weight: 800 !important;
+  }
+  .lal-hero__subtitle {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    color: #2b2b2b !important;
+    max-width: 100%;
+  }
+
+  /* ---- Foto ---- */
+  .lal-hero__media-wrap {
+    position: relative;
+    margin-top: 8px;
+  }
+  .lal-hero__media {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: #1a1a1a;
+    background-image: var(--lal-hero-photo);
+    background-size: cover;
+    background-position: center 20%;
+  }
+
+  /* ---- Overlay editorial sobre la foto ---- */
+  .lal-hero__overlay {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 56px 16px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.72) 45%, transparent 100%);
+    color: #fff;
+  }
+  .lal-hero__masthead {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+  .lal-hero__logo {
+    font-family: "Playfair Display", "Times New Roman", Georgia, serif !important;
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.005em !important;
+    color: #fff !important;
+    line-height: 1 !important;
+    font-style: normal !important;
+  }
+  .lal-hero__meta {
+    margin: 0 !important;
+    font-size: 9px !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    color: rgba(255,255,255,0.85) !important;
+    line-height: 1 !important;
+  }
+  .lal-hero__quote {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    font-style: italic !important;
+    line-height: 1.35 !important;
+    color: #fff !important;
+    text-align: left !important;
+  }
+  .lal-hero__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    color: var(--lal-ink) !important;
+    background: var(--lal-lime) !important;
+    letter-spacing: 0.04em !important;
+    padding: 9px 13px !important;
+    border-radius: 999px !important;
+    line-height: 1 !important;
+    text-transform: uppercase;
+    transition: transform .15s ease;
+  }
+  .lal-hero__link:hover { transform: translateY(-1px); }
+  .lal-hero__link svg { width: 11px; height: 11px; }
+
+  /* ===== Móviles muy pequeños (iPhone SE, etc.) ===== */
+  @media (max-width: 380px) {
+    .lal-hero__inner { max-width: 360px; padding: 0 14px; }
+    .lal-hero__card { padding: 20px 16px 44px; }
+    .lal-hero__title { font-size: 20px !important; }
+    .lal-hero__subtitle { font-size: 12px !important; }
+    .lal-hero__overlay { padding: 52px 14px 14px; }
+  }
+
+  /* ===== Móviles grandes (iPhone 15 Pro Max) =====
+     Limitamos el ancho para que NO ocupe toda la pantalla */
+  @media (min-width: 430px) and (max-width: 767px) {
+    .lal-hero__inner { max-width: 400px; }
+    .lal-hero__media { aspect-ratio: 4 / 5; }
+  }
+
+  /* ===== Tablet ===== */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .lal-hero { padding: 32px 0; }
+    .lal-hero__inner { max-width: 640px; padding: 0 24px; }
+    .lal-hero__card { padding: 28px 26px 56px; border-radius: 24px; }
+    .lal-hero__title { font-size: 28px !important; }
+    .lal-hero__subtitle { font-size: 14px !important; }
+    .lal-hero__media { aspect-ratio: 16 / 10; border-radius: 24px; }
+    .lal-hero__media { background-position: center 25%; }
+  }
+
+  /* ===== Desktop (>= 1024px) — Layout de 2 columnas lado a lado ===== */
+  @media (min-width: 1024px) {
+    .lal-hero { padding: 56px 0; }
+    .lal-hero__inner {
+      max-width: 1180px;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 32px;
+      align-items: stretch;
+    }
+    .lal-hero__card {
+      padding: 48px 44px;
+      border-radius: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* En desktop ya no hace falta el "scoop" curvo */
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
+    .lal-hero__eyebrow { font-size: 11px !important; margin-bottom: 18px !important; }
+    .lal-hero__eyebrow::before { width: 28px; }
+    .lal-hero__title {
+      font-size: 42px !important;
+      line-height: 1.05 !important;
+      margin-bottom: 18px !important;
+    }
+    .lal-hero__subtitle {
+      font-size: 16px !important;
+      line-height: 1.55 !important;
+      max-width: 46ch;
+    }
+    .lal-hero__media-wrap { margin-top: 0; height: 100%; }
+    .lal-hero__media {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 480px;
+      border-radius: 28px;
+    }
+    .lal-hero__overlay { padding: 100px 32px 28px; }
+    .lal-hero__masthead { margin-bottom: 10px; padding-bottom: 10px; }
+    .lal-hero__logo { font-size: 22px !important; }
+    .lal-hero__meta { font-size: 10.5px !important; }
+    .lal-hero__quote { font-size: 18px !important; margin-bottom: 16px !important; }
+    .lal-hero__link { font-size: 12px !important; padding: 11px 16px !important; }
+    .lal-hero__link svg { width: 12px; height: 12px; }
+  }
+
+  /* ===== Desktop grande (>= 1440px) ===== */
+  @media (min-width: 1440px) {
+    .lal-hero__inner { max-width: 1280px; gap: 40px; }
+    .lal-hero__card { padding: 56px 52px; }
+    .lal-hero__title { font-size: 48px !important; }
+    .lal-hero__media { min-height: 560px; }
+  }
+</style>
+
+<section class="lal-hero" aria-labelledby="lal-hero-title">
+  <div class="lal-hero__inner">
+    <div class="lal-hero__card">
+      <p class="lal-hero__eyebrow">Destacadas en El Espectador</p>
+      <h2 id="lal-hero-title" class="lal-hero__title">
+        Cami y Liz, la historia que <em>la prensa nacional</em> quiso contar.
+      </h2>
+      <p class="lal-hero__subtitle">
+        Dos hermanas, una marca que ya vende en Guatemala y México, y la mira puesta en Estados Unidos para 2025.
+      </p>
+    </div>
+
+    <div class="lal-hero__media-wrap">
+      <div class="lal-hero__media" role="img" aria-label="Lizeth y Camila Contreras, fundadoras de LALÍ Jeans">
+        <div class="lal-hero__overlay">
+          <div class="lal-hero__masthead">
+            <span class="lal-hero__logo">El Espectador</span>
+            <span class="lal-hero__meta">Emprendimiento · 20 nov 2024</span>
+          </div>
+          <p class="lal-hero__quote">
+            "Las hermanas detrás de una marca de jeans personalizados con estilo y creatividad."
+          </p>
+          <a class="lal-hero__link"
+             href="https://www.elespectador.com/economia/emprendimiento-y-liderazgo/las-hermanas-detras-de-una-marca-de-jeans-personalizados-con-estilo-y-creatividad/"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Leer el artículo completo en El Espectador">
+            Leer artículo
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M9 7h8v8"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
