@@ -1,0 +1,488 @@
+<!--
+  LAL Jeans — "Complementa tu look" (con pin dinámico por producto)
+  ============================================================================
+  QUÉ HACE
+  - Muestra un carrusel de productos relacionados al que se está viendo.
+  - Excluye automáticamente el producto actual (nunca aparece en la lista).
+  - Permite "anclar" un producto específico como PRIMERA tarjeta según el
+    producto que se esté viendo (configurable más abajo en PINNED_FIRST).
+  - Si el producto actual no coincide con ninguna regla, cae a las
+    recomendaciones nativas de Shopify y, como último recurso, a /products.json.
+    Demo art si todo falla (útil al diseñar en Instant.so).
+
+  CÓMO PERSONALIZAR
+  - Edita el array PINNED_FIRST. Cada regla tiene:
+      match : array de palabras que deben aparecer TODAS en el handle o
+              título del producto que se está viendo (sin tildes, en minúsculas).
+      pin   : array de handles candidatos a anclar como primera tarjeta. Se usa
+              el primero que exista en tu tienda. Si ninguno existe, se ignora
+              la regla y se carga el carrusel normal.
+  - Reglas pedidas por el cliente (puedes agregar/quitar):
+      barrel + cow            -> chaqueta cow
+      straight + bombay       -> blusa denim asimétrica
+      wide leg + cuero        -> chaqueta pomelo negra
+      wide leg + collins      -> chaqueta englobada mocca
+      wide leg + denim        -> crop top denim
+  - El orden importa: la primera regla que matchea gana. Pon las más
+    específicas arriba (p. ej. "cuero" antes que "denim").
+  - Si no estás 100% segur@ del handle exacto en tu tienda, pon varios
+    candidatos en `pin` separados por coma. El script probará uno por uno.
+
+  DÓNDE PEGAR
+  - Instant.so: Custom HTML block dentro de la página de producto.
+  - Shopify theme: dentro de sections/main-product.liquid.
+  ============================================================================
+-->
+
+<style>
+  .lal-complementa {
+    --lal-bg: #f4f3d5;
+    --lal-surface: #ffffff;
+    --lal-ink: #0a0a0a;
+    --lal-muted: #6b6b6b;
+    --lal-accent: #d7e34a;
+    --lal-accent-hover: #c7d43a;
+    --lal-nav-ink: #3b3ba0;
+    background: var(--lal-bg);
+    padding: 40px 0 48px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1f1f1f;
+  }
+  @supports (container-type: inline-size) {
+    .lal-complementa { container-type: inline-size; }
+  }
+  .lal-complementa * { box-sizing: border-box; }
+  .lal-complementa__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+  }
+  .lal-complementa .lal-complementa__title {
+    margin: 0 0 24px !important;
+    padding: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-stretch: normal !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.05 !important;
+    color: var(--lal-ink) !important;
+    text-transform: none !important;
+    text-align: left !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  @media (min-width: 900px) {
+    .lal-complementa .lal-complementa__title { font-size: 34px !important; }
+  }
+  @supports (container-type: inline-size) {
+    .lal-complementa .lal-complementa__title {
+      font-size: clamp(26px, 5cqw, 40px) !important;
+    }
+  }
+  .lal-complementa__carousel { position: relative; }
+  .lal-complementa__track {
+    list-style: none;
+    margin: 0;
+    padding: 4px 4px 12px;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .lal-complementa__track::-webkit-scrollbar { display: none; }
+  .lal-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    background: var(--lal-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 42% 1fr;
+    min-height: 170px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+  }
+  .lal-card__media { position: relative; background: #eee; overflow: hidden; }
+  .lal-card__img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform .4s ease;
+  }
+  .lal-card:hover .lal-card__img { transform: scale(1.03); }
+  .lal-card__fav {
+    position: absolute; top: 10px; left: 10px;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: none; background: rgba(255,255,255,0.85);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .lal-card__fav svg { width: 18px; height: 18px; color: #111; }
+  .lal-card__fav[aria-pressed="true"] svg { color: #e0245e; fill: #e0245e; }
+  .lal-card__body {
+    padding: 14px 14px 14px !important;
+    display: flex !important; flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .lal-card__name {
+    margin: 0 !important; font-size: 14px !important; font-weight: 500 !important;
+    color: #2b2b2b !important; line-height: 1.3 !important;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lal-card__price {
+    margin: 0 !important; font-size: 16px !important;
+    font-weight: 800 !important; color: var(--lal-ink) !important;
+  }
+  .lal-card__cta {
+    margin-top: auto !important;
+    border: none !important; background: var(--lal-accent) !important;
+    color: var(--lal-ink) !important;
+    font-weight: 700 !important; font-size: 12px !important; letter-spacing: .04em !important;
+    padding: 10px 12px !important; border-radius: 12px !important; cursor: pointer;
+    display: inline-flex; gap: 6px; align-items: center; justify-content: center;
+    line-height: 1 !important; width: 100% !important;
+  }
+  .lal-card__cta:hover { background: var(--lal-accent-hover); }
+  .lal-card__cta[aria-pressed="true"] { background: var(--lal-ink); color: var(--lal-accent); }
+
+  .lal-complementa__nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid #d9d6a8; background: var(--lal-bg);
+    color: var(--lal-nav-ink);
+    display: grid; place-items: center; cursor: pointer; z-index: 2;
+    transition: transform .15s ease, background .15s ease, opacity .2s ease;
+  }
+  .lal-complementa__nav svg { width: 22px; height: 22px; }
+  .lal-complementa__nav:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+  .lal-complementa__nav:disabled { opacity: .35; cursor: not-allowed; }
+  .lal-complementa__nav--prev { left: -8px; }
+  .lal-complementa__nav--next { right: -8px; }
+  @media (min-width: 1024px) {
+    .lal-complementa__nav--prev { left: -22px; }
+    .lal-complementa__nav--next { right: -22px; }
+  }
+  .lal-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--lal-muted); font-size: 14px; }
+</style>
+
+<section class="lal-complementa" aria-labelledby="lal-complementa-title">
+  <div class="lal-complementa__inner">
+    <h2 id="lal-complementa-title" class="lal-complementa__title">Complementa tu look</h2>
+    <div class="lal-complementa__carousel">
+      <button class="lal-complementa__nav lal-complementa__nav--prev" type="button" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <ul class="lal-complementa__track" role="list"></ul>
+      <button class="lal-complementa__nav lal-complementa__nav--next" type="button" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     CONFIG: reglas para anclar un producto como PRIMERA tarjeta
+     según el producto que se está viendo.
+     - match: TODAS las palabras deben aparecer en el handle o título
+              del producto actual (normalizado: sin tildes, minúsculas,
+              guiones convertidos en espacios).
+     - pin:   handle(s) candidatos a anclar (se prueba el primero que
+              exista). Ajusta los handles a los exactos de tu tienda.
+     IMPORTANTE: el orden importa. La primera regla que matchea gana.
+     ============================================================ */
+  const PINNED_FIRST = [
+    // Barrel denim COW -> Chaqueta COW
+    { match: ["barrel", "cow"],       pin: ["chaqueta-cow", "chaqueta-denim-cow"] },
+    // Jean straight Bombay -> Blusa denim asimétrica
+    { match: ["straight", "bombay"],  pin: ["blusa-denim-asimetrica", "blusa-asimetrica-denim"] },
+    // Jean wide leg en cuero sintético -> Chaqueta Pomelo negra
+    { match: ["wide", "cuero"],       pin: ["chaqueta-pomelo-negra", "chaqueta-pomelo-negro"] },
+    // Jean wide leg Collins -> Chaqueta englobada Mocca
+    { match: ["wide", "collins"],     pin: ["chaqueta-englobada-mocca", "chaqueta-englobada-moca"] },
+    // Jean wide leg en denim -> Crop top en denim
+    { match: ["wide", "denim"],       pin: ["crop-top-denim", "crop-top-en-denim"] },
+  ];
+
+  function initLal() {
+    try {
+      const roots = document.querySelectorAll(".lal-complementa:not([data-lal-init])");
+      if (!roots.length) return;
+      roots.forEach((root) => {
+        try {
+          root.setAttribute("data-lal-init", "true");
+          mount(root);
+        } catch (e) { console.warn("[LAL] init instance failed", e); }
+      });
+    } catch (e) { console.warn("[LAL] init failed", e); }
+  }
+
+  function mount(root) {
+    const track = root.querySelector(".lal-complementa__track");
+    const prev  = root.querySelector(".lal-complementa__nav--prev");
+    const next  = root.querySelector(".lal-complementa__nav--next");
+    if (!track || !prev || !next) return;
+
+    const money = (cents) => new Intl.NumberFormat("es-CO", {
+      style: "currency", currency: "COP", maximumFractionDigits: 0
+    }).format(Number(cents) / 100);
+
+    const norm = (s) => (s || "")
+      .toString()
+      .toLowerCase()
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    /* 1) Detecta el producto actual */
+    async function getCurrentProduct() {
+      let id = null, handle = null, title = null;
+      if (window.ShopifyAnalytics && window.ShopifyAnalytics.meta && window.ShopifyAnalytics.meta.product) {
+        id = window.ShopifyAnalytics.meta.product.id;
+      }
+      if (!id && window.meta && window.meta.product) {
+        id = window.meta.product.id;
+      }
+      const m = location.pathname.match(/\/products\/([^/?#]+)/);
+      if (m) handle = m[1];
+      if (handle) {
+        try {
+          const r = await fetch(`/products/${handle}.js`);
+          if (r.ok) {
+            const p = await r.json();
+            id = id || p.id;
+            title = p.title;
+          }
+        } catch (e) {}
+      }
+      return { id, handle, title };
+    }
+
+    /* 2) Encuentra la regla que aplica al producto actual */
+    function findRule(current) {
+      const haystack = norm(`${current.handle || ""} ${current.title || ""}`);
+      if (!haystack) return null;
+      for (const rule of PINNED_FIRST) {
+        const all = rule.match.every(w => haystack.includes(norm(w)));
+        if (all) return rule;
+      }
+      return null;
+    }
+
+    /* 3) Intenta traer un producto por handle (probando varios candidatos) */
+    async function fetchPinned(handles, excludeId) {
+      for (const h of handles) {
+        try {
+          const r = await fetch(`/products/${h}.js`);
+          if (!r.ok) continue;
+          const p = await r.json();
+          if (excludeId && String(p.id) === String(excludeId)) continue;
+          return {
+            id: p.id,
+            title: p.title,
+            handle: p.handle,
+            url: p.url || `/products/${p.handle}`,
+            price: p.price, // ya viene en minor units
+            featured_image: p.featured_image || (p.images && p.images[0]) || "",
+            variants: p.variants || [],
+          };
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function normalizeFromProductsJson(p) {
+      const price = p.variants && p.variants[0] ? parseFloat(p.variants[0].price) * 100 : 0;
+      return {
+        id: p.id,
+        title: p.title,
+        handle: p.handle,
+        url: `/products/${p.handle}`,
+        price: price,
+        featured_image: (p.images && p.images[0] && (p.images[0].src || p.images[0])) || "",
+        variants: p.variants || [],
+      };
+    }
+
+    async function tryRecommendations(productId) {
+      if (!productId) return [];
+      try {
+        const r = await fetch(`/recommendations/products.json?product_id=${productId}&limit=8&intent=related`);
+        if (!r.ok) return [];
+        const data = await r.json();
+        return (data.products || []).filter(p => String(p.id) !== String(productId));
+      } catch (e) { return []; }
+    }
+
+    async function tryAllProducts(productId) {
+      try {
+        const r = await fetch(`/products.json?limit=30`);
+        if (!r.ok) return [];
+        const data = await r.json();
+        const list = (data.products || [])
+          .filter(p => !productId || String(p.id) !== String(productId))
+          .map(normalizeFromProductsJson);
+        return shuffle(list).slice(0, 8);
+      } catch (e) { return []; }
+    }
+
+    const DEMO = [
+      { id: "d1", title: "Chaqueta cow", handle: "#demo", price: 24990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='#1d1d1f'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='#f4f3d5' text-anchor='middle' dominant-baseline='middle'>chaqueta cow</text></svg>"), variants: [] },
+      { id: "d2", title: "Crop top denim", handle: "#demo", price: 12990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='#3c5a7a'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='#f4f3d5' text-anchor='middle' dominant-baseline='middle'>crop top denim</text></svg>"), variants: [] },
+      { id: "d3", title: "Blusa denim asimétrica", handle: "#demo", price: 14990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='#7aa8d4'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='#0a0a0a' text-anchor='middle' dominant-baseline='middle'>blusa asim.</text></svg>"), variants: [] },
+      { id: "d4", title: "Chaqueta englobada mocca", handle: "#demo", price: 23990000, featured_image: "data:image/svg+xml;utf8," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='#7a5a3c'/><text x='50%' y='50%' font-family='Inter' font-size='26' font-weight='700' fill='#f4f3d5' text-anchor='middle' dominant-baseline='middle'>englobada mocca</text></svg>"), variants: [] },
+    ];
+
+    async function loadRelated(productId) {
+      const a = await tryRecommendations(productId);
+      if (a.length) return a;
+      const b = await tryAllProducts(productId);
+      if (b.length) return b;
+      return DEMO;
+    }
+
+    /* 4) Render */
+    function card(p) {
+      const a = document.createElement("a");
+      a.className = "lal-card";
+      a.href = p.url || `/products/${p.handle}`;
+      a.dataset.productId = p.id;
+      a.innerHTML = `
+        <div class="lal-card__media">
+          <button class="lal-card__fav" type="button" aria-pressed="false" aria-label="Favorito">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+            </svg>
+          </button>
+          <img class="lal-card__img" src="${p.featured_image || (p.images && p.images[0]) || ''}" alt="${p.title}" loading="lazy" />
+        </div>
+        <div class="lal-card__body">
+          <div>
+            <h3 class="lal-card__name">${p.title}</h3>
+            <p class="lal-card__price">${money(p.price)}</p>
+          </div>
+          <button class="lal-card__cta" type="button" aria-pressed="false" data-variant-id="${(p.variants && p.variants[0] && p.variants[0].id) || ''}">
+            + AGREGAR
+          </button>
+        </div>
+      `;
+      return a;
+    }
+
+    function render(products) {
+      track.innerHTML = "";
+      if (!products.length) {
+        const li = document.createElement("li");
+        li.className = "lal-empty";
+        li.textContent = "Pronto tendremos más prendas para complementar tu look.";
+        track.appendChild(li);
+        return;
+      }
+      const frag = document.createDocumentFragment();
+      products.forEach(p => frag.appendChild(card(p)));
+      track.appendChild(frag);
+      updateNav();
+    }
+
+    /* 5) Carrusel + favoritos + add to cart */
+    const scrollAmount = () => {
+      const c = track.querySelector(".lal-card");
+      if (!c) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap || "20");
+      return c.getBoundingClientRect().width + gap;
+    };
+    function updateNav() {
+      const max = track.scrollWidth - track.clientWidth - 1;
+      prev.disabled = track.scrollLeft <= 0;
+      next.disabled = track.scrollLeft >= max;
+    }
+    prev.addEventListener("click", () => track.scrollBy({ left: -scrollAmount(), behavior: "smooth" }));
+    next.addEventListener("click", () => track.scrollBy({ left:  scrollAmount(), behavior: "smooth" }));
+    track.addEventListener("scroll", updateNav, { passive: true });
+    addEventListener("resize", updateNav);
+
+    track.addEventListener("click", async (e) => {
+      const fav = e.target.closest(".lal-card__fav");
+      if (fav) {
+        e.preventDefault();
+        fav.setAttribute("aria-pressed", fav.getAttribute("aria-pressed") === "true" ? "false" : "true");
+        return;
+      }
+      const cta = e.target.closest(".lal-card__cta");
+      if (cta) {
+        e.preventDefault();
+        const variantId = cta.dataset.variantId;
+        if (!variantId) return;
+        cta.textContent = "Agregando...";
+        try {
+          const res = await fetch("/cart/add.js", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] })
+          });
+          if (res.ok) {
+            cta.textContent = "✓ AGREGADO";
+            cta.setAttribute("aria-pressed", "true");
+            document.dispatchEvent(new CustomEvent("lal:cart-updated"));
+          } else {
+            cta.textContent = "+ AGREGAR";
+          }
+        } catch (err) {
+          cta.textContent = "+ AGREGAR";
+        }
+      }
+    });
+
+    /* 6) Bootstrap por instancia */
+    (async function boot() {
+      try {
+        const current = await getCurrentProduct();
+        const rule = findRule(current);
+
+        // Productos relacionados (excluyendo el actual)
+        let related = await loadRelated(current.id);
+        related = related.filter(p => String(p.id) !== String(current.id));
+
+        // Si la regla aplica, traer el producto anclado y ponerlo primero
+        if (rule) {
+          const pinned = await fetchPinned(rule.pin, current.id);
+          if (pinned) {
+            related = related.filter(p => String(p.id) !== String(pinned.id));
+            related = [pinned, ...related];
+          }
+        }
+
+        // Limitar a 8 tarjetas
+        render(related.slice(0, 8));
+      } catch (e) {
+        console.warn("[LAL] boot failed", e);
+        render([]);
+      }
+    })();
+  } // end mount()
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLal);
+  } else {
+    initLal();
+  }
+})();
+</script>
