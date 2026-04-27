@@ -29,9 +29,8 @@
     </p>
   </div>
 
-  <!-- Acento decorativo sutil (lima) -->
   <span class="lali-measure__deco" aria-hidden="true">
-    <svg viewBox="0 0 40 40" width="40" height="40" fill="none" stroke="#E1E580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="#E1E580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 3 L23 17 L37 20 L23 23 L20 37 L17 23 L3 20 L17 17 Z"></path>
     </svg>
   </span>
@@ -44,10 +43,15 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 16px;
     background: #F0E8D8;
     color: #2A1F4A;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
     overflow: hidden;
   }
 
@@ -57,23 +61,19 @@
     box-sizing: border-box;
   }
 
-  /* ---------- Video (vertical 9:16) ---------- */
+  /* ---------- Video (vertical 9:16, compacto) ---------- */
   .lali-measure__media {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    flex: 0 0 auto;
   }
 
   .lali-measure__video-wrap {
     position: relative;
-    width: 100%;
-    max-width: 300px;
+    width: 128px;
     aspect-ratio: 9 / 16;
-    margin: 0 auto;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
     background: #000000;
-    box-shadow: 0 12px 32px rgba(100, 29, 255, 0.18);
+    box-shadow: 0 6px 18px rgba(100, 29, 255, 0.16);
   }
 
   .lali-measure__video {
@@ -88,27 +88,27 @@
 
   /* ---------- Contenido ---------- */
   .lali-measure__content {
-    width: 100%;
-    margin-top: 24px;
-    text-align: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
   }
 
   .lali-measure__eyebrow {
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #641DFF;
   }
 
   .lali-measure__title {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
     font-weight: 800;
-    font-size: 28px;
-    line-height: 1.1;
+    font-size: 19px;
+    line-height: 1.15;
     letter-spacing: -0.01em;
     color: #641DFF;
   }
@@ -117,7 +117,7 @@
     margin: 0;
     font-family: 'Ciguatera', Georgia, serif;
     font-style: italic;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.35;
     color: #A38BE8;
   }
@@ -125,87 +125,96 @@
   /* ---------- Acento decorativo ---------- */
   .lali-measure__deco {
     position: absolute;
-    top: 14px;
-    right: 14px;
+    top: 10px;
+    right: 12px;
     opacity: 0.85;
     pointer-events: none;
   }
 
   /* ---------- Tablet ---------- */
-  @media (min-width: 768px) {
+  @media (min-width: 600px) {
     .lali-measure {
-      padding: 40px 32px;
+      padding: 20px 24px;
+      gap: 22px;
     }
 
     .lali-measure__video-wrap {
-      max-width: 320px;
+      width: 160px;
+      border-radius: 14px;
+    }
+
+    .lali-measure__eyebrow {
+      font-size: 11px;
     }
 
     .lali-measure__title {
-      font-size: 34px;
+      font-size: 26px;
     }
 
     .lali-measure__subtitle {
-      font-size: 20px;
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .lali-measure {
+      padding: 24px 28px;
+      gap: 28px;
     }
 
-    .lali-measure__deco {
-      top: 20px;
-      right: 24px;
+    .lali-measure__video-wrap {
+      width: 190px;
+    }
+
+    .lali-measure__title {
+      font-size: 30px;
+    }
+
+    .lali-measure__subtitle {
+      font-size: 17px;
     }
   }
 
   /* ---------- Desktop ---------- */
   @media (min-width: 1024px) {
     .lali-measure {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 56px;
-      padding: 64px 48px;
+      padding: 32px 40px;
+      gap: 40px;
       border-radius: 20px;
     }
 
-    .lali-measure__media {
-      flex: 0 0 auto;
-      width: auto;
-      justify-content: flex-start;
-    }
-
     .lali-measure__video-wrap {
-      max-width: 340px;
-      width: 340px;
-      margin: 0;
+      width: 230px;
+      border-radius: 16px;
     }
 
-    .lali-measure__content {
-      flex: 1 1 auto;
-      margin-top: 0;
-      text-align: left;
+    .lali-measure__eyebrow {
+      font-size: 12px;
+      margin-bottom: 8px;
     }
 
     .lali-measure__title {
-      font-size: 44px;
+      font-size: 38px;
+      margin-bottom: 10px;
     }
 
     .lali-measure__subtitle {
-      font-size: 22px;
+      font-size: 19px;
     }
 
     .lali-measure__deco {
-      top: 32px;
-      right: 36px;
+      top: 18px;
+      right: 22px;
     }
   }
 
   @media (min-width: 1280px) {
     .lali-measure__video-wrap {
-      max-width: 360px;
-      width: 360px;
+      width: 260px;
     }
 
     .lali-measure__title {
-      font-size: 48px;
+      font-size: 42px;
     }
   }
 </style>
