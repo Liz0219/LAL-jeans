@@ -1,0 +1,223 @@
+:root {
+  --lal-bg: #f7f5f1;
+  --lal-surface: #ffffff;
+  --lal-ink: #1a1a1a;
+  --lal-muted: #6b6b6b;
+  --lal-accent: #1a1a1a;
+  --lal-accent-hover: #3a3a3a;
+  --lal-border: #e6e2da;
+  --lal-radius: 4px;
+  --lal-max: 1200px;
+  --lal-font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.measurement-guide {
+  background: var(--lal-bg);
+  color: var(--lal-ink);
+  font-family: var(--lal-font);
+  padding: clamp(48px, 8vw, 96px) 20px;
+}
+
+.measurement-guide__container {
+  max-width: var(--lal-max);
+  margin: 0 auto;
+}
+
+.measurement-guide__header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto clamp(32px, 5vw, 56px);
+}
+
+.measurement-guide__eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lal-muted);
+  margin-bottom: 12px;
+}
+
+.measurement-guide__title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+.measurement-guide__subtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--lal-muted);
+  margin: 0;
+}
+
+.measurement-guide__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .measurement-guide__content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.measurement-guide__video-wrapper {
+  position: relative;
+}
+
+.measurement-guide__video-frame {
+  position: relative;
+  background: #000;
+  border-radius: var(--lal-radius);
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  max-height: 720px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.measurement-guide__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.measurement-guide__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--lal-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, opacity 0.25s ease;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+.measurement-guide__play svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+  margin-left: 4px;
+}
+
+.measurement-guide__play:hover {
+  transform: scale(1.06);
+  background: #fff;
+}
+
+.measurement-guide__play.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.measurement-guide__video-caption {
+  text-align: center;
+  font-size: 13px;
+  color: var(--lal-muted);
+  margin: 16px 0 0;
+}
+
+.measurement-guide__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.measurement-guide__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  background: var(--lal-surface);
+  border: 1px solid var(--lal-border);
+  border-radius: var(--lal-radius);
+  padding: 20px 22px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.measurement-guide__step:hover {
+  border-color: var(--lal-ink);
+  transform: translateY(-2px);
+}
+
+.measurement-guide__step-number {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--lal-ink);
+  background: var(--lal-bg);
+  border: 1px solid var(--lal-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  min-width: 44px;
+  text-align: center;
+}
+
+.measurement-guide__step-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.measurement-guide__step-text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--lal-muted);
+  margin: 0;
+}
+
+.measurement-guide__cta {
+  margin-top: clamp(40px, 6vw, 64px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.measurement-guide__button {
+  background: var(--lal-accent);
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: var(--lal-radius);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.measurement-guide__button:hover {
+  background: var(--lal-accent-hover);
+}
+
+.measurement-guide__link {
+  color: var(--lal-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-size: 14px;
+}
+
+.measurement-guide__link:hover {
+  color: var(--lal-muted);
+}
