@@ -1,6 +1,12 @@
 <!--
   LALÍ Jeans — Sección "¿Cómo tomarse las medidas?"
   Code Block para Instant.so (HTML + CSS inline, sin JS).
+
+  La sección usa container queries: se adapta al ancho REAL del
+  contenedor donde la pegues (no al ancho del navegador), así
+  funciona igual de bien en una columna estrecha del product
+  template que a ancho completo de página.
+
   Pega todo este archivo dentro de un Code Block de Instant.so.
 -->
 
@@ -30,20 +36,25 @@
   </div>
 
   <span class="lali-measure__deco" aria-hidden="true">
-    <svg viewBox="0 0 40 40" width="32" height="32" fill="none" stroke="#E1E580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 40 40" width="28" height="28" fill="none" stroke="#E1E580" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M20 3 L23 17 L37 20 L23 23 L20 37 L17 23 L3 20 L17 17 Z"></path>
     </svg>
   </span>
 </section>
 
 <style>
+  /* La sección es su propio contenedor:
+     todo lo de adentro escala según SU ancho, no el del viewport. */
   .lali-measure {
+    container-type: inline-size;
+    container-name: measure;
+
     position: relative;
     box-sizing: border-box;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 16px;
+    padding: 14px;
     background: #F0E8D8;
     color: #2A1F4A;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
@@ -61,14 +72,14 @@
     box-sizing: border-box;
   }
 
-  /* ---------- Video (vertical 9:16, compacto) ---------- */
+  /* ---------- Video (vertical 9:16) ---------- */
   .lali-measure__media {
     flex: 0 0 auto;
   }
 
   .lali-measure__video-wrap {
     position: relative;
-    width: 128px;
+    width: 108px;
     aspect-ratio: 9 / 16;
     border-radius: 12px;
     overflow: hidden;
@@ -94,9 +105,9 @@
   }
 
   .lali-measure__eyebrow {
-    margin: 0 0 6px;
+    margin: 0 0 4px;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -104,20 +115,23 @@
   }
 
   .lali-measure__title {
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     font-family: 'Linear Grotesk', 'Helvetica Neue', Arial, sans-serif;
     font-weight: 800;
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: #641DFF;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
   }
 
   .lali-measure__subtitle {
     margin: 0;
     font-family: 'Ciguatera', Georgia, serif;
     font-style: italic;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.35;
     color: #A38BE8;
   }
@@ -125,96 +139,71 @@
   /* ---------- Acento decorativo ---------- */
   .lali-measure__deco {
     position: absolute;
-    top: 10px;
-    right: 12px;
+    top: 8px;
+    right: 10px;
     opacity: 0.85;
     pointer-events: none;
   }
 
-  /* ---------- Tablet ---------- */
-  @media (min-width: 600px) {
+  /* ---------------------------------------------------
+     Container queries — escalado según ancho REAL de la
+     sección (no del viewport). Sirve igual dentro de una
+     columna estrecha o a ancho completo.
+     --------------------------------------------------- */
+  @container measure (min-width: 420px) {
+    .lali-measure {
+      padding: 16px 18px;
+      gap: 16px;
+    }
+    .lali-measure__video-wrap { width: 128px; }
+    .lali-measure__eyebrow { font-size: 10px; margin-bottom: 6px; }
+    .lali-measure__title { font-size: 20px; margin-bottom: 8px; }
+    .lali-measure__subtitle { font-size: 14px; }
+    .lali-measure__deco { top: 10px; right: 12px; }
+  }
+
+  @container measure (min-width: 600px) {
     .lali-measure {
       padding: 20px 24px;
       gap: 22px;
     }
-
     .lali-measure__video-wrap {
-      width: 160px;
+      width: 156px;
       border-radius: 14px;
     }
+    .lali-measure__eyebrow { font-size: 11px; }
+    .lali-measure__title { font-size: 26px; }
+    .lali-measure__subtitle { font-size: 16px; }
+  }
 
-    .lali-measure__eyebrow {
-      font-size: 11px;
+  @container measure (min-width: 820px) {
+    .lali-measure {
+      padding: 26px 32px;
+      gap: 32px;
+      border-radius: 18px;
     }
-
-    .lali-measure__title {
-      font-size: 26px;
-    }
-
-    .lali-measure__subtitle {
-      font-size: 16px;
+    .lali-measure__video-wrap { width: 196px; }
+    .lali-measure__title { font-size: 32px; margin-bottom: 10px; }
+    .lali-measure__subtitle { font-size: 18px; }
+    .lali-measure__deco {
+      width: 32px; height: 32px;
+      top: 16px; right: 20px;
     }
   }
 
-  @media (min-width: 768px) {
+  @container measure (min-width: 1080px) {
     .lali-measure {
-      padding: 24px 28px;
-      gap: 28px;
-    }
-
-    .lali-measure__video-wrap {
-      width: 190px;
-    }
-
-    .lali-measure__title {
-      font-size: 30px;
-    }
-
-    .lali-measure__subtitle {
-      font-size: 17px;
-    }
-  }
-
-  /* ---------- Desktop ---------- */
-  @media (min-width: 1024px) {
-    .lali-measure {
-      padding: 32px 40px;
-      gap: 40px;
+      padding: 32px 44px;
+      gap: 44px;
       border-radius: 20px;
     }
-
     .lali-measure__video-wrap {
-      width: 230px;
+      width: 232px;
       border-radius: 16px;
     }
-
-    .lali-measure__eyebrow {
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .lali-measure__title {
-      font-size: 38px;
-      margin-bottom: 10px;
-    }
-
-    .lali-measure__subtitle {
-      font-size: 19px;
-    }
-
-    .lali-measure__deco {
-      top: 18px;
-      right: 22px;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .lali-measure__video-wrap {
-      width: 260px;
-    }
-
-    .lali-measure__title {
-      font-size: 42px;
-    }
+    .lali-measure__eyebrow { font-size: 12px; margin-bottom: 8px; }
+    .lali-measure__title { font-size: 38px; }
+    .lali-measure__subtitle { font-size: 20px; }
+    .lali-measure__deco { top: 22px; right: 28px; }
   }
 </style>
